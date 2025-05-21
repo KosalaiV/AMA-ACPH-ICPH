@@ -40,7 +40,6 @@
 #       CYPRESS_username: ${{secrets.CYPRESS_USERNAME}}
 #       CYPRESS_password: ${{secrets.CYPRESS_PASSWORD}}
 #       PERCY_TOKEN: ${{secrets.PERCY_TOKEN}}
-
 name: test-automation
 
 on:
@@ -73,6 +72,10 @@ on:
 
 jobs:
   chrome-desktop:
+    runs-on: macos-latest
+    env:
+      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -80,17 +83,20 @@ jobs:
       marge: true
       working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file cypress.{4}.config.js',
-        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
+        env.PREFIX,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        github.event.inputs.website.toLowerCase()
-       ) }}
+        env.CONFIG_FILE
+        ) }}
     secrets: inherit
-    runs-on: macos-latest
 
   firefox-desktop:
+    runs-on: macos-latest
+    env:
+      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -98,17 +104,20 @@ jobs:
       marge: true
       working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser firefox --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file cypress.{4}.config.js',
-        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser firefox --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
+        env.PREFIX,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        github.event.inputs.website.toLowerCase()
-       ) }}
+        env.CONFIG_FILE
+        ) }}
     secrets: inherit
-    runs-on: macos-latest
 
   edge-desktop:
+    runs-on: windows-latest
+    env:
+      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -116,17 +125,20 @@ jobs:
       marge: true
       working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser edge --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file cypress.{4}.config.js',
-        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser edge --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
+        env.PREFIX,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        github.event.inputs.website.toLowerCase()
-       ) }}
+        env.CONFIG_FILE
+        ) }}
     secrets: inherit
-    runs-on: windows-latest
 
   iphone-chrome:
+    runs-on: macos-latest
+    env:
+      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -134,17 +146,20 @@ jobs:
       marge: false
       working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=390,viewportHeight=844 --config-file cypress.{4}.config.js',
-        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=390,viewportHeight=844 --config-file {4}',
+        env.PREFIX,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        github.event.inputs.website.toLowerCase()
-       ) }}
+        env.CONFIG_FILE
+        ) }}
     secrets: inherit
-    runs-on: macos-latest
 
   android-chrome:
+    runs-on: macos-latest
+    env:
+      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -152,17 +167,20 @@ jobs:
       marge: false
       working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=412,viewportHeight=915 --config-file cypress.{4}.config.js',
-        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=412,viewportHeight=915 --config-file {4}',
+        env.PREFIX,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        github.event.inputs.website.toLowerCase()
-       ) }}
+        env.CONFIG_FILE
+        ) }}
     secrets: inherit
-    runs-on: macos-latest
 
   ipad-chrome:
+    runs-on: macos-latest
+    env:
+      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -170,17 +188,20 @@ jobs:
       marge: false
       working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=820,viewportHeight=1180 --config-file cypress.{4}.config.js',
-        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=820,viewportHeight=1180 --config-file {4}',
+        env.PREFIX,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        github.event.inputs.website.toLowerCase()
-       ) }}
+        env.CONFIG_FILE
+        ) }}
     secrets: inherit
-    runs-on: macos-latest
 
   tab-chrome:
+    runs-on: macos-latest
+    env:
+      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -188,12 +209,11 @@ jobs:
       marge: false
       working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=768,viewportHeight=1024 --config-file cypress.{4}.config.js',
-        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=768,viewportHeight=1024 --config-file {4}',
+        env.PREFIX,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        github.event.inputs.website.toLowerCase()
-       ) }}
+        env.CONFIG_FILE
+        ) }}
     secrets: inherit
-    runs-on: macos-latest
