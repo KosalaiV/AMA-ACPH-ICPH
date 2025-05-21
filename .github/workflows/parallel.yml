@@ -74,148 +74,135 @@ on:
 
 jobs:
   chrome-desktop:
-    runs-on: macos-latest
-    env:
-      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: true
       working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
         'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
-        env.PREFIX,
+        inputs.prefix,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        env.CONFIG_FILE
+        inputs.config-file
        ) }}
     secrets: inherit
 
   firefox-desktop:
-    runs-on: macos-latest
-    env:
-      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: firefox
       marge: true
       working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
         'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser firefox --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
-        env.PREFIX,
+        inputs.prefix,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        env.CONFIG_FILE
+        inputs.config-file
        ) }}
     secrets: inherit
 
   edge-desktop:
-    runs-on: windows-latest
-    env:
-      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: edge
       marge: true
       working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
         'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser edge --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
-        env.PREFIX,
+        inputs.prefix,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        env.CONFIG_FILE
+        inputs.config-file
        ) }}
     secrets: inherit
 
   iphone-chrome:
-    runs-on: macos-latest
-    env:
-      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
       working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
         'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=390,viewportHeight=844 --config-file {4}',
-        env.PREFIX,
+        inputs.prefix,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        env.CONFIG_FILE
+        inputs.config-file
        ) }}
     secrets: inherit
 
   android-chrome:
-    runs-on: macos-latest
-    env:
-      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
       working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
         'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=412,viewportHeight=915 --config-file {4}',
-        env.PREFIX,
+        inputs.prefix,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        env.CONFIG_FILE
+        inputs.config-file
        ) }}
     secrets: inherit
 
   ipad-chrome:
-    runs-on: macos-latest
-    env:
-      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
       working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
         'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=820,viewportHeight=1180 --config-file {4}',
-        env.PREFIX,
+        inputs.prefix,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        env.CONFIG_FILE
+        inputs.config-file
        ) }}
     secrets: inherit
 
   tab-chrome:
-    runs-on: macos-latest
-    env:
-      PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
       working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
         'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=768,viewportHeight=1024 --config-file {4}',
-        env.PREFIX,
+        inputs.prefix,
         github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
-        env.CONFIG_FILE
+        inputs.config-file
        ) }}
     secrets: inherit
+
