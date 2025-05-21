@@ -79,18 +79,14 @@ jobs:
       browser: chrome
       marge: true
       working-directory: "test-automation"
-      command: >-
-        ${{ github.event.inputs.testing-type == 'Visual' && format(
-          'npx percy exec -- cypress run --spec cypress/e2e/Visual/{0}/*.cy.js --browser chrome --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) || format(
-          'npx cypress run --headed --spec cypress/e2e/Functional/{0}/*.cy.js --browser chrome --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file cypress.{4}.config.js',
+        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        github.event.inputs.website.toLowerCase()
+       ) }}
     secrets: inherit
     runs-on: macos-latest
 
@@ -101,18 +97,14 @@ jobs:
       browser: firefox
       marge: true
       working-directory: "test-automation"
-      command: >-
-        ${{ github.event.inputs.testing-type == 'Visual' && format(
-          'npx percy exec -- cypress run --spec cypress/e2e/Visual/{0}/*.cy.js --browser firefox --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) || format(
-          'npx cypress run --headed --spec cypress/e2e/Functional/{0}/*.cy.js --browser firefox --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser firefox --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file cypress.{4}.config.js',
+        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        github.event.inputs.website.toLowerCase()
+       ) }}
     secrets: inherit
     runs-on: macos-latest
 
@@ -123,18 +115,14 @@ jobs:
       browser: edge
       marge: true
       working-directory: "test-automation"
-      command: >-
-        ${{ github.event.inputs.testing-type == 'Visual' && format(
-          'npx percy exec -- cypress run --spec cypress/e2e/Visual/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) || format(
-          'npx cypress run --headed --spec cypress/e2e/Functional/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser edge --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file cypress.{4}.config.js',
+        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        github.event.inputs.website.toLowerCase()
+       ) }}
     secrets: inherit
     runs-on: windows-latest
 
@@ -145,18 +133,14 @@ jobs:
       browser: chrome
       marge: false
       working-directory: "test-automation"
-      command: >-
-        ${{ github.event.inputs.testing-type == 'Visual' && format(
-          'npx percy exec -- cypress run --spec cypress/e2e/Visual/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) || format(
-          'npx cypress run --headed --spec cypress/e2e/Functional/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=390,viewportHeight=844 --config-file cypress.{4}.config.js',
+        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        github.event.inputs.website.toLowerCase()
+       ) }}
     secrets: inherit
     runs-on: macos-latest
 
@@ -167,18 +151,14 @@ jobs:
       browser: chrome
       marge: false
       working-directory: "test-automation"
-      command: >-
-        ${{ github.event.inputs.testing-type == 'Visual' && format(
-          'npx percy exec -- cypress run --spec cypress/e2e/Visual/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) || format(
-          'npx cypress run --headed --spec cypress/e2e/Functional/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=412,viewportHeight=915 --config-file cypress.{4}.config.js',
+        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        github.event.inputs.website.toLowerCase()
+       ) }}
     secrets: inherit
     runs-on: macos-latest
 
@@ -189,18 +169,14 @@ jobs:
       browser: chrome
       marge: false
       working-directory: "test-automation"
-      command: >-
-        ${{ github.event.inputs.testing-type == 'Visual' && format(
-          'npx percy exec -- cypress run --spec cypress/e2e/Visual/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) || format(
-          'npx cypress run --headed --spec cypress/e2e/Functional/{0}/*.cy.js --browser edge --env environment={1},viewportWidth=1280,viewportHeight=720 --config-file cypress.{2}.config.js',
-          github.event.inputs.website,
-          github.event.inputs.env-type,
-          github.event.inputs.website.toLowerCase()
-        ) }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=820,viewportHeight=1180 --config-file cypress.{4}.config.js',
+        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        github.event.inputs.website.toLowerCase()
+       ) }}
     secrets: inherit
     runs-on: macos-latest
 
@@ -211,11 +187,13 @@ jobs:
       browser: chrome
       marge: false
       working-directory: "test-automation"
-      command: format(
-        'npx cypress run --headed --spec cypress/e2e/Functional/{0}/*.cy.js --browser chrome --env environment={1},viewportWidth=768,viewportHeight=1024 --config-file cypress.{2}.config.js',
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=768,viewportHeight=1024 --config-file cypress.{4}.config.js',
+        github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '',
+        github.event.inputs.testing-type,
         github.event.inputs.website,
         github.event.inputs.env-type,
         github.event.inputs.website.toLowerCase()
-       )
+       ) }}
     secrets: inherit
     runs-on: macos-latest
