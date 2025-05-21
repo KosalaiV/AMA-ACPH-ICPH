@@ -40,6 +40,8 @@
 #       CYPRESS_username: ${{secrets.CYPRESS_USERNAME}}
 #       CYPRESS_password: ${{secrets.CYPRESS_PASSWORD}}
 #       PERCY_TOKEN: ${{secrets.PERCY_TOKEN}}
+
+
 name: test-automation
 
 on:
@@ -75,7 +77,7 @@ jobs:
     runs-on: macos-latest
     env:
       PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
+      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -89,14 +91,14 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-        ) }}
+      ) }}
     secrets: inherit
 
   firefox-desktop:
     runs-on: macos-latest
     env:
       PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
+      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -110,14 +112,14 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-        ) }}
+      ) }}
     secrets: inherit
 
   edge-desktop:
     runs-on: windows-latest
     env:
       PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
+      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -131,14 +133,14 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-        ) }}
+      ) }}
     secrets: inherit
 
   iphone-chrome:
     runs-on: macos-latest
     env:
       PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
+      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -152,14 +154,14 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-        ) }}
+      ) }}
     secrets: inherit
 
   android-chrome:
     runs-on: macos-latest
     env:
       PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
+      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -173,14 +175,14 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-        ) }}
+      ) }}
     secrets: inherit
 
   ipad-chrome:
     runs-on: macos-latest
     env:
       PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
+      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -194,14 +196,14 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-        ) }}
+      ) }}
     secrets: inherit
 
   tab-chrome:
     runs-on: macos-latest
     env:
       PREFIX: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      CONFIG_FILE: ${{ format('cypress.{0}.config.js', github.event.inputs.website.toLower()) }}
+      CONFIG_FILE: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
@@ -215,5 +217,5 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-        ) }}
+      ) }}
     secrets: inherit
