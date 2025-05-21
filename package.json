@@ -1,0 +1,33 @@
+{
+  "name": "ama-multisites",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "stage-run": "cypress run --headed --env environment=stage --browser chrome",
+    "acph-dev-open": "cypress open --env environment=dev --config-file cypress.acph.config.js",
+    "acph-stage-open": "cypress open --env environment=stage --config-file cypress.acph.config.js",
+    "acph-prod-open": "cypress open --env environment=prod --config-file cypress.acph.config.js",
+    "icph-stage-open": "cypress open --env environment=stage --config-file cypress.icph.config.js",
+    "prod-open": "cypress open --env environment=prod",
+    "percy": "percy exec -- cypress run",
+    "merge-report": "npx mochawesome-merge mochawesome-report/*.json -o cypress/results/index.json",
+    "create-report": "npx marge cypress/results/index.json --charts true --showHooks always --reportDir cypress/results --reportFilename index.html",
+    "generate-report": "npm run merge-report && npm run create-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "13.15.0",
+    "cypress-real-events": "^1.14.0",
+    "cypress-split": "^1.24.0",
+    "mochawesome": "7.1.3",
+    "mochawesome-merge": "4.2.2"
+  },
+  "devDependencies": {
+    "@percy/cli": "^1.29.3",
+    "@percy/cypress": "latest",
+    "cy-verify-downloads": "^0.1.11"
+  }
+}

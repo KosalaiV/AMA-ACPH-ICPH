@@ -1,0 +1,17 @@
+{
+  "Home": { "url": "/" },
+  "Devices": { "url": "/devices" },
+  "Validation": { "url": "/manufacturers" },
+  "Submit Device": { "url": "/submission" },
+  "Resources": { "url": "/resources" },
+  "About Us": { "url": "/about-us" },
+  "Contact Us": { "url": "/contact-us" },
+  "Terms Of Service": { "url": "/terms-of-service" },
+  "Device With No Price": { "url": "/device/joytech-dbp-6279b/" },
+  "Device With Disclaimer": {
+    "url": "/device/gold-wireless-wrist-blood-pressure-monitorhem-6232t"
+  },
+  "Device Without Disclaimer": {
+    "url": "/device/advanced-manual-inflate-blood-pressure-monitorua-705v-704/"
+  }
+}
