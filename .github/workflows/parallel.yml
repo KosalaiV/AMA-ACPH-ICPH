@@ -91,7 +91,7 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-      ) }}
+       ) }}
     secrets: inherit
 
   firefox-desktop:
@@ -112,7 +112,7 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-      ) }}
+       ) }}
     secrets: inherit
 
   edge-desktop:
@@ -133,7 +133,7 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-      ) }}
+       ) }}
     secrets: inherit
 
   iphone-chrome:
@@ -154,7 +154,7 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-      ) }}
+       ) }}
     secrets: inherit
 
   android-chrome:
@@ -175,7 +175,7 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-      ) }}
+       ) }}
     secrets: inherit
 
   ipad-chrome:
@@ -196,7 +196,7 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-      ) }}
+       ) }}
     secrets: inherit
 
   tab-chrome:
@@ -217,5 +217,5 @@ jobs:
         github.event.inputs.website,
         github.event.inputs.env-type,
         env.CONFIG_FILE
-      ) }}
+       ) }}
     secrets: inherit
