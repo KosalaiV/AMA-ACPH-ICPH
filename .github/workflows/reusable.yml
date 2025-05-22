@@ -284,6 +284,8 @@
 #         with:
 #           name: merged-mochawesome-report
 #           path: ${{ inputs.working-directory }}/mochawesome
+
+
 name: split
 
 on:
@@ -424,7 +426,16 @@ jobs:
           SPLIT_INDEX: ${{ strategy.job-index }}
           DEBUG: ${{ inputs.debug }}
         with:
-          command: ${{ inputs.command || format('{0}cypress run --config-file {1} --spec "{2}" --browser "{3}" --env "{4}"', inputs.prefix, inputs.config-file, inputs.spec, inputs.browser, inputs.env) }}
+          command: ${{ inputs.command || format('{0}cypress run{1}{2}{3}{4}{5}{6}{7}',
+            inputs.prefix,
+            inputs.spec && format(' --spec \"{0}\"', inputs.spec) || '',
+            inputs.browser && format(' --browser \"{0}\"', inputs.browser) || '',
+            inputs.env && format(' --env \"{0}\"', inputs.env) || '',
+            inputs.config-file && format(' --config-file {0}', inputs.config-file) || '',
+            inputs.headed && ' --headed' || '',
+            inputs.project && format(' --project {0}', inputs.project) || '',
+            inputs.working-directory && format(' --config {0}', inputs.working-directory) || ''
+          ) }}
           config: ${{ inputs.config }}
           config-file: ${{ inputs.config-file }}
           env: ${{ inputs.env }}
@@ -509,3 +520,4 @@ jobs:
         with:
           name: merged-mochawesome-report
           path: ${{ inputs.working-directory }}/mochawesome
+

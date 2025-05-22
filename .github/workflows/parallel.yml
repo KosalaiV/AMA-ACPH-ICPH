@@ -41,237 +41,168 @@
 #       CYPRESS_password: ${{secrets.CYPRESS_PASSWORD}}
 #       PERCY_TOKEN: ${{secrets.PERCY_TOKEN}}
 
-name: split
+
+name: test-automation
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
-      n:
-        description: "Number of parallel containers"
-        type: number
+      website:
+        type: choice
+        description: "Select the website:"
+        options:
+          - ACPH
+          - ICPH
         required: true
-        default: 1
 
-      prefix:
-        description: "Optional command prefix like 'percy exec --'"
-        type: string
-        required: false
+      testing-type:
+        type: choice
+        description: "Select the testing type:"
+        options:
+          - Functional
+          - Visual
+        required: true
 
-      config-file:
-        description: "Cypress config file path (e.g., cypress.acph.config.js)"
-        type: string
-        required: false
-
-      config:
-        type: string
-        required: false
-      env:
-        type: string
-        required: false
-      browser:
-        type: string
-        required: false
-      command:
-        type: string
-        required: false
-      start:
-        type: string
-        required: false
-      start-windows:
-        type: string
-        required: false
-      build:
-        type: string
-        required: false
-      install:
-        type: boolean
-        required: false
-        default: true
-      install-command:
-        type: string
-        required: false
-      runTests:
-        type: boolean
-        required: false
-        default: true
-      wait-on:
-        type: string
-        required: false
-      wait-on-timeout:
-        type: number
-        required: false
-        default: 60
-      working-directory:
-        type: string
-        required: false
-      headed:
-        type: boolean
-        required: false
-      spec:
-        type: string
-        required: false
-      project:
-        type: string
-        required: false
-      command-prefix:
-        type: string
-        required: false
-      cache-key:
-        type: string
-        required: false
-      quiet:
-        type: boolean
-        required: false
-        default: false
-      debug-inputs:
-        type: boolean
-        required: false
-        default: false
-      debug:
-        type: string
-        required: false
-        default: ""
-      store-artifacts:
-        type: boolean
-        required: false
-        default: true
-      marge:
-        type: boolean
-        required: false
-        default: false
-      slack:
-        type: boolean
-        required: false
-        default: false
+      env-type:
+        type: choice
+        description: "Select the environment:"
+        options:
+          - prod
+          - stage
+          - dev
+        required: true
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.prepare.outputs.matrix }}
-    steps:
-      - name: Create container matrix ⊹
-        id: prepare
-        uses: bahmutov/gh-build-matrix@main
-        with:
-          n: ${{ inputs.n }}
-      - name: Print matrix 🖨
-        run: echo '${{ steps.prepare.outputs.matrix }}'
+  chrome-desktop:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
+      browser: chrome
+      marge: true
+      # working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
+        inputs.prefix,
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        inputs.config-file
+       ) }}
+    secrets: inherit
 
-  tests:
-    needs: prepare
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
-    steps:
-      - name: Debug inputs 🐞
-        if: ${{ inputs.debug-inputs }}
-        env:
-          WORKFLOW_INPUTS: ${{ toJson(inputs) }}
-        run: echo "$WORKFLOW_INPUTS"
+  firefox-desktop:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
+      browser: firefox
+      marge: true
+      # working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser firefox --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
+        inputs.prefix,
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        inputs.config-file
+       ) }}
+    secrets: inherit
 
-      - name: Checkout 🛎
-        uses: actions/checkout@v4
+  edge-desktop:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
+      browser: edge
+      marge: true
+      # working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser edge --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
+        inputs.prefix,
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        inputs.config-file
+       ) }}
+    secrets: inherit
 
-      - name: Run Cypress tests 🧪
-        uses: cypress-io/github-action@v5
-        env:
-          SPLIT: ${{ strategy.job-total }}
-          SPLIT_INDEX: ${{ strategy.job-index }}
-          DEBUG: ${{ inputs.debug }}
-        with:
-          command: ${{ inputs.command || format('{0}cypress run{1}{2}{3}{4}{5}{6}{7}',
-            inputs.prefix,
-            inputs.spec && format(' --spec \"{0}\"', inputs.spec) || '',
-            inputs.browser && format(' --browser \"{0}\"', inputs.browser) || '',
-            inputs.env && format(' --env \"{0}\"', inputs.env) || '',
-            inputs.config-file && format(' --config-file {0}', inputs.config-file) || '',
-            inputs.headed && ' --headed' || '',
-            inputs.project && format(' --project {0}', inputs.project) || '',
-            inputs.working-directory && format(' --config {0}', inputs.working-directory) || ''
-          ) }}
-          config: ${{ inputs.config }}
-          config-file: ${{ inputs.config-file }}
-          env: ${{ inputs.env }}
-          browser: ${{ inputs.browser }}
-          start: ${{ inputs.start }}
-          start-windows: ${{ inputs.start-windows }}
-          install: ${{ inputs.install }}
-          install-command: ${{ inputs.install-command }}
-          runTests: ${{ inputs.runTests }}
-          wait-on: ${{ inputs.wait-on }}
-          wait-on-timeout: ${{ inputs.wait-on-timeout }}
-          working-directory: ${{ inputs.working-directory }}
-          headed: ${{ inputs.headed }}
-          spec: ${{ inputs.spec }}
-          project: ${{ inputs.project }}
-          command-prefix: ${{ inputs.command-prefix }}
-          cache-key: ${{ inputs.cache-key }}
-          quiet: ${{ inputs.quiet }}
+  iphone-chrome:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
+      browser: chrome
+      marge: false
+      # working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=390,viewportHeight=844 --config-file {4}',
+        inputs.prefix,
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        inputs.config-file
+       ) }}
+    secrets: inherit
 
-      - uses: actions/upload-artifact@v4
-        if: ${{ inputs.store-artifacts && always() }}
-        with:
-          name: cypress-split-results-${{ strategy.job-index }}
-          path: |
-            ${{ inputs.working-directory }}/cypress/screenshots
-            ${{ inputs.working-directory }}/cypress/videos
-            ${{ inputs.working-directory }}/cypress/results
-          if-no-files-found: ignore
+  android-chrome:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
+      browser: chrome
+      marge: false
+      # working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=412,viewportHeight=915 --config-file {4}',
+        inputs.prefix,
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        inputs.config-file
+       ) }}
+    secrets: inherit
 
-  report:
-    if: ${{ inputs.store-artifacts && inputs.marge && always() }}
-    needs: tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@v4
+  ipad-chrome:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
+      browser: chrome
+      marge: false
+      # working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=820,viewportHeight=1180 --config-file {4}',
+        inputs.prefix,
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        inputs.config-file
+       ) }}
+    secrets: inherit
 
-      - name: Install dependencies 🧪
-        uses: cypress-io/github-action@v5
-        with:
-          runTests: false
-          working-directory: ${{ inputs.working-directory }}
+  tab-chrome:
+    uses: ./.github/workflows/reusable.yml
+    with:
+      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
+      browser: chrome
+      marge: false
+      # working-directory: "test-automation"
+      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
+      command: ${{ format(
+        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=768,viewportHeight=1024 --config-file {4}',
+        inputs.prefix,
+        github.event.inputs.testing-type,
+        github.event.inputs.website,
+        github.event.inputs.env-type,
+        inputs.config-file
+       ) }}
+    secrets: inherit
 
-      - uses: actions/download-artifact@v4
-        with:
-          path: ${{ inputs.working-directory }}/split-results
-
-      - name: Display downloaded structure
-        run: |
-          cd ${{ inputs.working-directory }}
-          ls -R split-results
-
-      - name: Prepare report folders
-        run: |
-          cd ${{ inputs.working-directory }}
-          mkdir -p mochawesome/screenshots
-          mkdir -p mochawesome/videos
-          mkdir -p mochawesome/results
-          mkdir -p mochawesome/html-reports
-
-      - name: Copy test assets
-        run: |
-          cd ${{ inputs.working-directory }}
-          cp -r split-results/cypress-split-results-*/screenshots/* mochawesome/screenshots || true
-          cp -r split-results/cypress-split-results-*/videos/* mochawesome/videos || true
-          cp -r split-results/cypress-split-results-*/results/* mochawesome/results || true
-
-      - name: Merge Mochawesome JSON
-        run: |
-          cd ${{ inputs.working-directory }}
-          npx mochawesome-merge mochawesome/results/*.json -o mochawesome/html-reports/merged.json
-
-      - name: Generate HTML report
-        run: |
-          cd ${{ inputs.working-directory }}
-          npx marge mochawesome/html-reports/merged.json \
-            --charts true --showHooks always \
-            --reportDir mochawesome/html-reports \
-            --reportFilename index.html
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: merged-mochawesome-report
-          path: ${{ inputs.working-directory }}/mochawesome
