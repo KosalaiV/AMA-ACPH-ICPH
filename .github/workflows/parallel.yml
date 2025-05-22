@@ -79,7 +79,7 @@ jobs:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: true
-      working-directory: "test-automation"
+      # working-directory: "test-automation"
       prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
       config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
@@ -98,7 +98,7 @@ jobs:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: firefox
       marge: true
-      working-directory: "test-automation"
+      # working-directory: "test-automation"
       prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
       config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
@@ -117,7 +117,7 @@ jobs:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: edge
       marge: true
-      working-directory: "test-automation"
+      # working-directory: "test-automation"
       prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
       config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
@@ -136,7 +136,7 @@ jobs:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
-      working-directory: "test-automation"
+      # working-directory: "test-automation"
       prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
       config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
@@ -155,7 +155,7 @@ jobs:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
-      working-directory: "test-automation"
+      # working-directory: "test-automation"
       prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
       config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
@@ -174,7 +174,7 @@ jobs:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
-      working-directory: "test-automation"
+      # working-directory: "test-automation"
       prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
       config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
@@ -193,7 +193,7 @@ jobs:
       n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
       browser: chrome
       marge: false
-      working-directory: "test-automation"
+      # working-directory: "test-automation"
       prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
       config-file: ${{ github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js' }}
       command: ${{ format(
