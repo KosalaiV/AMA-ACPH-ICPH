@@ -435,7 +435,7 @@ jobs:
             inputs.headed && ' --headed' || '',
             inputs.project && format(' --project {0}', inputs.project) || '',
             inputs.working-directory && format(' --config {0}', inputs.working-directory) || ''
-          ) }}
+           ) }}
           config: ${{ inputs.config }}
           config-file: ${{ inputs.config-file }}
           env: ${{ inputs.env }}
