@@ -478,7 +478,7 @@ jobs:
           cache-key: ${{ inputs.cache-key }}
           quiet: ${{ inputs.quiet }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ inputs.store-artifacts && always() }}
         with:
           name: cypress-split-results-${{ strategy.job-index }}
@@ -539,7 +539,7 @@ jobs:
             --reportDir mochawesome/html-reports \
             --reportFilename index.html
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: merged-mochawesome-report
           path: ${{ inputs.working-directory }}/mochawesome
