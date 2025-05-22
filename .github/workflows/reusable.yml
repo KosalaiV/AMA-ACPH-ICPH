@@ -285,7 +285,6 @@
 #           name: merged-mochawesome-report
 #           path: ${{ inputs.working-directory }}/mochawesome
 
-
 name: split
 
 on:
@@ -297,7 +296,6 @@ on:
         required: true
         default: 1
 
-      # Additional dynamic inputs
       prefix:
         description: "Optional command prefix like 'percy exec --'"
         type: string
@@ -308,109 +306,84 @@ on:
         type: string
         required: false
 
-      # Existing inputs
       config:
-        description: "Set configuration values. Comma-separated. Overrides config file."
         type: string
         required: false
       env:
-        description: "Sets Cypress environment variables"
         type: string
         required: false
       browser:
-        description: "Name of the browser to use"
         type: string
         required: false
       command:
-        description: "Command that overrides cypress run"
         type: string
         required: false
       start:
-        description: "Command to start local server in background"
         type: string
         required: false
       start-windows:
-        description: "Alternative start command for Windows"
         type: string
         required: false
       build:
-        description: "Build step before running tests"
         type: string
         required: false
       install:
-        description: "Run install step"
         type: boolean
         required: false
         default: true
       install-command:
-        description: "Custom install command"
         type: string
         required: false
       runTests:
-        description: "Whether to run tests"
         type: boolean
         required: false
         default: true
       wait-on:
-        description: "Server URL to wait for"
         type: string
         required: false
       wait-on-timeout:
-        description: "Seconds to wait for wait-on URL"
         type: number
         required: false
         default: 60
       working-directory:
-        description: "Working directory containing Cypress folder"
         type: string
         required: false
       headed:
-        description: "Run Cypress in headed mode"
         type: boolean
         required: false
       spec:
-        description: "Specific specs to run"
         type: string
         required: false
       project:
-        description: "Path of project"
         type: string
         required: false
       command-prefix:
-        description: "Prefix for default test command"
         type: string
         required: false
       cache-key:
-        description: "Custom cache key"
         type: string
         required: false
       quiet:
-        description: "Silence Cypress output"
         type: boolean
         required: false
         default: false
       debug-inputs:
-        description: "Print input variables"
         type: boolean
         required: false
         default: false
       debug:
-        description: "Set DEBUG environment variable"
         type: string
         required: false
         default: ""
       store-artifacts:
-        description: "Store screenshots and videos"
         type: boolean
         required: false
         default: true
       marge:
-        description: "Merge Mochawesome reports"
         type: boolean
         required: false
         default: false
       slack:
-        description: "Post test status and failed screenshots to Slack"
         type: boolean
         required: false
         default: false
@@ -443,25 +416,19 @@ jobs:
         run: echo "$WORKFLOW_INPUTS"
 
       - name: Checkout 🛎
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4@f43a0e5ff2bd294095638e18286ca9a3d1956744
 
       - name: Run Cypress tests 🧪
         uses: cypress-io/github-action@v5
         env:
           SPLIT: ${{ strategy.job-total }}
           SPLIT_INDEX: ${{ strategy.job-index }}
-          SPEC: "${{ inputs.spec }}"
           DEBUG: ${{ inputs.debug }}
         with:
-          command: >-
-            ${{ inputs.prefix }}cypress run
-            --config-file ${{ inputs.config-file }}
-            --spec "${{ inputs.spec }}"
-            --browser "${{ inputs.browser }}"
-            --env "${{ inputs.env }}"
+          command: ${{ inputs.command || format('{0}cypress run --config-file {1} --spec "{2}" --browser "{3}" --env "{4}"', inputs.prefix, inputs.config-file, inputs.spec, inputs.browser, inputs.env) }}
           config: ${{ inputs.config }}
           config-file: ${{ inputs.config-file }}
-          env: "${{ inputs.env }}"
+          env: ${{ inputs.env }}
           browser: ${{ inputs.browser }}
           start: ${{ inputs.start }}
           start-windows: ${{ inputs.start-windows }}
@@ -478,7 +445,7 @@ jobs:
           cache-key: ${{ inputs.cache-key }}
           quiet: ${{ inputs.quiet }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4@5c584f167abc9186b6f2929c47d40863c2cd2adf
         if: ${{ inputs.store-artifacts && always() }}
         with:
           name: cypress-split-results-${{ strategy.job-index }}
@@ -494,7 +461,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4@f43a0e5ff2bd294095638e18286ca9a3d1956744
 
       - name: Install dependencies 🧪
         uses: cypress-io/github-action@v5
@@ -502,7 +469,7 @@ jobs:
           runTests: false
           working-directory: ${{ inputs.working-directory }}
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4@78373f1eebfffa53fc6a3c746009cdb41c88b20a
         with:
           path: ${{ inputs.working-directory }}/split-results
 
@@ -539,7 +506,7 @@ jobs:
             --reportDir mochawesome/html-reports \
             --reportFilename index.html
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4@5c584f167abc9186b6f2929c47d40863c2cd2adf
         with:
           name: merged-mochawesome-report
           path: ${{ inputs.working-directory }}/mochawesome
