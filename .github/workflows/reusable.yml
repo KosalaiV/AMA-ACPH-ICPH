@@ -657,7 +657,7 @@ on:
 
 jobs:
   prepare:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     # explicitly set the output of this job
     # so that other jobs can use it
     outputs:
