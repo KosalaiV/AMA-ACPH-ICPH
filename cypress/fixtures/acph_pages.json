@@ -1,0 +1,34 @@
+{
+  "Home": { "url": "/" },
+  "About Us": { "url": "/about-acph" },
+  "Registration": {
+    "url": "/conference-on-physician-health-information/registration-options-and-inclusions"
+  },
+  "Conference Overview": {
+    "url": "/conference-on-physician-health-information"
+  },
+  "FAQ": { "url": "/faq" },
+  "Contact Us": { "url": "/contact-us" },
+  "Abstracts": { "url": "/abstracts" },
+  "Travel Details": {
+    "url": "/conference-on-physician-health-information/travel-details"
+  },
+  "2025 Conference Info": {
+    "url": "/conference-on-physician-health-information/american-conference-on-physician-health-2025"
+  },
+  "Conference Materials": {
+    "url": "/conference-on-physician-health-information/conference-materials"
+  },
+  "CME Information": {
+    "url": "/conference-on-physician-health-information/cme"
+  },
+  "Speakers": {
+    "url": "/conference-on-physician-health-information/conference-speakers"
+  },
+  "Exhibitors and Sponsors": {
+    "url": "/conference-on-physician-health-information/exhibitors-and-sponsors"
+  },
+  "Past Conference Resources": {
+    "url": "/conference-on-physician-health-information/past-conference-resources"
+  }
+}

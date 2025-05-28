@@ -134,7 +134,7 @@
 
 # jobs:
 #   prepare:
-#     runs-on: ubuntu-latest
+#     runs-on: macos-latest
 #     # explicitly set the output of this job
 #     # so that other jobs can use it
 #     outputs:
@@ -153,7 +153,7 @@
 #   # the N parallel testing jobs we create
 #   tests:
 #     needs: prepare
-#     runs-on: ubuntu-latest
+#     runs-on: macos-latest
 #     # env:
 #     #   CYPRESS_username: ${{secrets.CYPRESS_USERNAME}}
 #     #   CYPRESS_password: ${{ secrets.CYPRESS_PASSWORD }}
@@ -221,7 +221,7 @@
 #   report:
 #     if: ${{ inputs.store-artifacts && inputs.marge && always() }}
 #     needs: tests
-#     runs-on: ubuntu-latest
+#     runs-on: macos-latest
 
 #     steps:
 #       - name: Checkout 🛎
@@ -390,7 +390,7 @@
 
 # jobs:
 #   prepare:
-#     runs-on: ubuntu-latest
+#     runs-on: macos-latest
 #     outputs:
 #       matrix: ${{ steps.prepare.outputs.matrix }}
 #     steps:
@@ -404,7 +404,7 @@
 
 #   tests:
 #     needs: prepare
-#     runs-on: ubuntu-latest
+#     runs-on: macos-latest
 #     strategy:
 #       fail-fast: false
 #       matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
@@ -467,7 +467,7 @@
 #   report:
 #     if: ${{ inputs.store-artifacts && inputs.marge && always() }}
 #     needs: tests
-#     runs-on: ubuntu-latest
+#     runs-on: macos-latest
 #     steps:
 #       - name: Checkout 🛎
 #         uses: actions/checkout@v4
@@ -657,7 +657,7 @@ on:
 
 jobs:
   prepare:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     # explicitly set the output of this job
     # so that other jobs can use it
     outputs:
@@ -676,7 +676,7 @@ jobs:
   # the N parallel testing jobs we create
   tests:
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       CYPRESS_username: ${{secrets.CYPRESS_USERNAME}}
       CYPRESS_password: ${{ secrets.CYPRESS_PASSWORD }}
@@ -744,7 +744,7 @@ jobs:
   report:
     if: ${{ inputs.store-artifacts && inputs.marge && always() }}
     needs: tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - name: Checkout 🛎
