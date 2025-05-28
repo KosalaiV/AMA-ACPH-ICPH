@@ -41,12 +41,13 @@ jobs:
   split:
     uses: ./.github/workflows/reusable.yml
     with:
-      n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 10 }} # Set n to 1 for Visual, otherwise 10
+      n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 10 }}
       marge: true
       working-directory: "test-automation"
       command: ${{ format(
-        'npx cypress run --headed --spec cypress/e2e/{0}/*.cy.js --env environment={1} --browser {2} --config-file {3}',
+        'npx cypress run --headed --spec {0}/{1}/*.cy.js --env environment={2} --browser {3} --config-file {4}',
         github.event.inputs['testing-type'],
+        github.event.inputs['website'],
         github.event.inputs['env-type'],
         github.event.inputs['browser-type'],
         github.event.inputs['website'] == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
