@@ -45,7 +45,7 @@ jobs:
       marge: true
       # working-directory: "test-automation"
       command: ${{ format(
-        'npx cypress run --headed --spec cypress/e2e/{0}/{1}/*.cy.js --env environment={2} --browser {3} --config-file {4}',
+        'npx cypress run --spec cypress/e2e/{0}/{1}/*.cy.js --env environment={2} --browser {3} --config-file {4}',
         github.event.inputs['testing-type'],
         github.event.inputs['website'],
         github.event.inputs['env-type'],
