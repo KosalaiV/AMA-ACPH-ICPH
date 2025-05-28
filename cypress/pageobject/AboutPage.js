@@ -95,6 +95,236 @@ class AboutPage {
       .and("not.be.empty");
   }
 
+  verifyReadMoreFunction(endpoint, device) {
+    const charLimit = device === "macbook-16" ? 400 : 250;
+
+    cy.visitWithAuth(endpoint);
+
+    cy.document().then((doc) => {
+      const allBlocks = Array.from(
+        doc.querySelectorAll(".block-body-text-wrapper")
+      );
+
+      allBlocks.forEach((block, index) => {
+        const hasReadMore = block.querySelector(
+          'button.read-more-btn[style="display: inline-block;"]'
+        );
+
+        cy.wrap(block).within(() => {
+          cy.get(".ama-content-wrapper").as("contentWrapper");
+
+          cy.get("@contentWrapper")
+            .invoke("text")
+            .then((collapsedTextRaw) => {
+              const collapsedText = collapsedTextRaw.trim();
+              const charCount = collapsedText.length;
+
+              cy.log(
+                `📄 Block ${
+                  index + 1
+                } collapsed content length: ${charCount} chars`
+              );
+
+              if (hasReadMore) {
+                cy.log(`🔍 Block ${index + 1}: Has Read More button`);
+
+                // Step 1: Verify collapsed text exceeds threshold
+                expect(
+                  charCount,
+                  `Collapsed text should exceed ${charLimit} chars`
+                ).to.be.greaterThan(charLimit);
+
+                cy.get("button.read-more-btn").as("readMoreBtn");
+
+                // Step 2: Validate the button text is "Read More" (case-insensitive)
+                cy.get("@readMoreBtn")
+                  .should("be.visible")
+                  .contains("Read More", { matchCase: false });
+
+                // Step 3: Click Read More
+                cy.get("@readMoreBtn").scrollIntoView().click();
+
+                // Step 4: Validate the button text has now changed to "Read Less"
+                cy.get("@readMoreBtn")
+                  .should("be.visible")
+                  .contains("Read Less", { matchCase: false });
+
+                // Step 5: Get expanded text and validate it
+                cy.get("@contentWrapper")
+                  .invoke("text")
+                  .then((expandedTextRaw) => {
+                    const expandedText = expandedTextRaw.trim();
+                    const expandedCharCount = expandedText.length;
+
+                    cy.log(
+                      `📄 Block ${
+                        index + 1
+                      } expanded content length: ${expandedCharCount} chars`
+                    );
+
+                    expect(
+                      expandedCharCount,
+                      "Expanded text should be longer than collapsed"
+                    ).to.be.greaterThan(charCount);
+
+                    expect(
+                      expandedText.startsWith(
+                        collapsedText.replace(/\.\.\.$/, "")
+                      ),
+                      "Expanded content should begin with collapsed content"
+                    ).to.be.true;
+
+                    cy.log(`🔄 Clicking Read Less to collapse content`);
+
+                    // Step 6: Click Read Less to collapse
+                    cy.get("@readMoreBtn").scrollIntoView().click();
+
+                    // Step 7: Validate button text changed back to "Read More"
+                    cy.get("@readMoreBtn")
+                      .should("be.visible")
+                      .contains("Read More", { matchCase: false });
+
+                    // Step 8: Capture re-collapsed text and compare with original
+                    cy.get("@contentWrapper")
+                      .invoke("text")
+                      .then((reCollapsedTextRaw) => {
+                        const reCollapsedText = reCollapsedTextRaw.trim();
+                        const reCollapsedCount = reCollapsedText.length;
+
+                        cy.log(
+                          `📄 Block ${
+                            index + 1
+                          } collapsed again to length: ${reCollapsedCount} chars`
+                        );
+
+                        expect(
+                          reCollapsedCount,
+                          "Text length after collapsing should match or be near original"
+                        ).to.be.at.most(expandedCharCount);
+
+                        expect(
+                          reCollapsedText.startsWith(
+                            collapsedText.substring(0, 50)
+                          ),
+                          "Collapsed content should revert to original start"
+                        ).to.be.true;
+
+                        cy.log(
+                          `✅ Block ${
+                            index + 1
+                          } passed full Read More/Read Less validation.`
+                        );
+                      });
+                  });
+              } else {
+                cy.log(`ℹ️ Block ${index + 1}: No Read More button`);
+
+                expect(
+                  charCount,
+                  `Content should be strictly less than ${charLimit} chars when no Read More button is present`
+                ).to.be.lessThan(charLimit);
+
+                cy.log(
+                  `✅ Block ${index + 1} correctly rendered without Read More.`
+                );
+              }
+            });
+        });
+      });
+    });
+  }
+
+  //   verifyReadMoreFunction(endpoint,device) {
+  //   const charLimit = device === "macbook-16" ? 400 : 250;
+
+  //   cy.visitWithAuth(endpoint);
+
+  //   cy.document().then((doc) => {
+  //     const allBlocks = Array.from(
+  //       doc.querySelectorAll(".block-body-text-wrapper")
+  //     );
+
+  //     allBlocks.forEach((block, index) => {
+  //       const hasReadMore = block.querySelector(
+  //         'button.read-more-btn[style="display: inline-block;"]'
+  //       );
+
+  //       cy.wrap(block).within(() => {
+  //         cy.get(".ama-content-wrapper").as("contentWrapper");
+
+  //         cy.get("@contentWrapper")
+  //           .invoke("text")
+  //           .then((collapsedTextRaw) => {
+  //             const collapsedText = collapsedTextRaw.trim();
+  //             const charCount = collapsedText.length;
+
+  //             cy.log(
+  //               `📄 Block ${
+  //                 index + 1
+  //               } collapsed content length: ${charCount} chars`
+  //             );
+
+  //             if (hasReadMore) {
+  //               cy.log(`🔍 Block ${index + 1}: Has Read More button`);
+
+  //               // Step 1: Verify collapsed text exceeds threshold
+  //               expect(
+  //                 charCount,
+  //                 `Collapsed text should exceed ${charLimit} chars`
+  //               ).to.be.greaterThan(charLimit);
+
+  //               cy.get("button.read-more-btn").as("readMoreBtn").scrollIntoView().click();
+
+  //               // Step 2: Get expanded text and validate it's longer
+  //               cy.get("@contentWrapper")
+  //                 .invoke("text")
+  //                 .then((expandedTextRaw) => {
+  //                   const expandedText = expandedTextRaw.trim();
+  //                   const expandedCharCount = expandedText.length;
+
+  //                   cy.log(
+  //                     `📄 Block ${
+  //                       index + 1
+  //                     } expanded content length: ${expandedCharCount} chars`
+  //                   );
+
+  //                   expect(
+  //                     expandedCharCount,
+  //                     "Expanded text should be longer than collapsed"
+  //                   ).to.be.greaterThan(charCount);
+
+  //                   expect(
+  //                     expandedText.startsWith(
+  //                       collapsedText.replace(/\.\.\.$/, "")
+  //                     ),
+  //                     "Expanded content should begin with collapsed content"
+  //                   ).to.be.true;
+
+  //                   cy.log(
+  //                     `✅ Block ${
+  //                       index + 1
+  //                     } passed Read More character validation.`
+  //                   );
+  //                 });
+  //             } else {
+  //               cy.log(`ℹ️ Block ${index + 1}: No Read More button`);
+
+  //               // ✅ New strict check: length must be < threshold
+  //               expect(
+  //                 charCount,
+  //                 `Content should be strictly less than ${charLimit} chars when no Read More button is present`
+  //               ).to.be.lessThan(charLimit);
+
+  //               cy.log(
+  //                 `✅ Block ${index + 1} correctly rendered without Read More.`
+  //               );
+  //             }
+  //           });
+  //       });
+  //     });
+  //   });
+  // }
+
   //TS_30: About Us Page
   verifyNecessaryContent(device) {
     // Visit home page
@@ -120,7 +350,7 @@ class AboutPage {
     // Validate the title
     this.getCardsBlock().find(".cards-title").should("be.visible");
 
-      // Validate the title
+    // Validate the title
     this.getCardsBlock().find("p").should("be.visible");
 
     // Validate the CTA button
@@ -144,8 +374,6 @@ class AboutPage {
       .each((img) => {
         cy.wrap(img).should("exist");
       });
-
-
   }
 }
 

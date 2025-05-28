@@ -8,6 +8,7 @@
     "acph-dev-open": "cypress open --env environment=dev --config-file cypress.acph.config.js",
     "acph-stage-open": "cypress open --env environment=stage --config-file cypress.acph.config.js",
     "acph-prod-open": "cypress open --env environment=prod --config-file cypress.acph.config.js",
+    "icph-prod-open": "cypress open --env environment=prod --config-file cypress.icph.config.js",
     "icph-stage-open": "cypress open --env environment=stage --config-file cypress.icph.config.js",
     "prod-open": "cypress open --env environment=prod",
     "percy": "percy exec -- cypress run",

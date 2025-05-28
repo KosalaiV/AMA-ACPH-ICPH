@@ -1,10 +1,10 @@
 /*
-Contact Page TS_32: FAQ Block:-
+Breadcrumb Page TS_28: Breadcrumbs:-
 
-TC_68: Ensure the default position of accordions is collapsed
+TC_61: Verify breadcrumb functions as expected
 */
 
-import faqPage from "../../../pageobject/FAQPage";
+import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +14,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("FAQ - Accordion Default State", () => {
+describe("Verification of Breadcrumb Page TS 28 Breadcrumbs", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Ensure the default position of accordions is collapsed on ${device}`, () => {
+    it(`TC_61: Verify breadcrumb functions as expected on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      faqPage.verifyDefaultAccordionPosition(device);
+      homePage.validateBreadcrumbLinks(device);
     });
   });
 });

@@ -1,10 +1,11 @@
 /*
-Contact Page TS_32: FAQ Block:-
+About Page TS_30: About Us Page:-
 
-TC_68: Ensure the default position of accordions is collapsed
+TC_63: Verify the page holds necessary content in it
+TC_64: Verify the container has contact CTA linked to it is accessible
 */
 
-import faqPage from "../../../pageobject/FAQPage";
+import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +15,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("FAQ - Accordion Default State", () => {
+describe("Verification of Cards Block About Us Page", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Ensure the default position of accordions is collapsed on ${device}`, () => {
+    it(`Verify the page holds necessary content in it on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      faqPage.verifyDefaultAccordionPosition(device);
+      homePage.verifyNecessaryContent(device);
     });
   });
 });

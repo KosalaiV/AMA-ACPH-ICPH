@@ -4,7 +4,7 @@ Contact Page TS_32: FAQ Block:-
 TC_68: Ensure the default position of accordions is collapsed
 */
 
-import contactPage from "../../../pageobject/ContactPage";
+import faqPage from "../../../pageobject/FAQPage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +14,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Verification of Contact Page TS 32 FAQ Block", () => {
+describe("FAQ - Accordion Default State", () => {
   viewports.forEach(({ device, viewport }) => {
     it(`Ensure the default position of accordions is collapsed on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      contactPage.verifyDefaultAccordionPosition(device);
+      faqPage.verifyDefaultAccordionPosition(device);
     });
   });
 });

@@ -1,10 +1,10 @@
 /*
-Contact Page TS_32: FAQ Block:-
+Home Page TS_1: Home Page:-
 
-TC_68: Ensure the default position of accordions is collapsed
+TC_4: Check the status codes of all anchor tags (API call)
 */
 
-import faqPage from "../../../pageobject/FAQPage";
+import aboutPage from "../../../pageobject/AboutPage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +14,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("FAQ - Accordion Default State", () => {
+describe("About Us - Read More and Read Less Functionality", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Ensure the default position of accordions is collapsed on ${device}`, () => {
-      // Set the viewport for each test case
+    it(`Ensure the read more and read less works as expected in ${device}`, () => {
+        // Set the viewport for each test case
       cy.viewport(viewport);
-      faqPage.verifyDefaultAccordionPosition(device);
-    });
+      aboutPage.verifyReadMoreFunction("/about-acph",device);
   });
+});
 });

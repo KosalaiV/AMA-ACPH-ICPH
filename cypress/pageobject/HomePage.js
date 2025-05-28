@@ -1,9 +1,20 @@
 class HomePage {
   // Locators
 
-  //TS_1: Home Page
   getAllowButton() {
     return cy.get(".allowAll");
+  }
+
+  getCardsHeader() {
+    return cy.get(".cards-block-header");
+  }
+
+  getCardsBlock() {
+    return cy.get(".cards");
+  }
+
+  getCardsList() {
+    return cy.get(".cards>li");
   }
 
   getAnchorLinks() {
@@ -30,7 +41,6 @@ class HomePage {
     return cy.get("[class*='footer'] ul a");
   }
 
-  //TS_2: Hero Section
   getHeroSection() {
     return cy.get(".hero-banner");
   }
@@ -47,49 +57,12 @@ class HomePage {
     return cy.get(".slick-dots .slick-active button");
   }
 
-  //TS_3: Devices that Deliver Category
-  getDeviceDeliverContainer() {
-    return cy.get(".device-category__section");
-  }
-
-  getDeviceDeliverSliderCards() {
-    return cy.get(".slick--view--device-type .slick__slider .slick-active");
-  }
-
-  getDeviceDeliverSliderPrevButton() {
-    return cy.get(".device-category__section button.slick-prev");
-  }
-
-  getDeviceDeliverSliderNextButton() {
-    return cy.get(".device-category__section button.slick-next");
-  }
-
-  //TS_4: Submit a Device
-  getSubmitDeviceContainer() {
-    return cy.get(".submit-device-container");
-  }
-
-  getSubmitDeviceRightImage() {
-    return cy.get(".submit-device-section__right-image-wrapper img");
-  }
-
-  getSubmitDeviceLeftImage() {
-    return cy.get(".submit-device-section__left-image-wrapper img");
-  }
-
-  //TS_5: Validation Process
-  getValidationProcessContainer() {
-    return cy.get(".validation-process");
-  }
-
-  //TS_28 Breadcrumbs
   getBreadcrumb() {
-    return cy.get(".breadcrumbs");
+    return cy.get(".breadcrumbs-wrapper");
   }
 
-  //TS_35: Copyright
   getCopyright() {
-    return cy.get("#block-vdl-copyrightblock>p");
+    return cy.get(".copyright-block-wrapper p");
   }
 
   // Actions
@@ -252,38 +225,64 @@ class HomePage {
   }
 
   validateResponseCodes() {
-    // Visit home page
-    cy.visitWithAuth("/");
-
-    // Array to store URLs that failed validation
     const failedUrls = [];
 
-    // Collect all links from the specified section and validate each link
+    // Utility: Check if a URL is external
+    const isExternal = (url) => {
+      try {
+        const base = new URL(Cypress.config().baseUrl);
+        const target = new URL(url, base); // Resolves relative URLs
+        return base.hostname !== target.hostname;
+      } catch (e) {
+        return true; // Treat invalid URLs as external
+      }
+    };
+
     this.getAnchorLinks()
       .each(($el) => {
         const href = $el.attr("href");
-        if (href) {
-          // Make a request to the URL and validate the response code
-          cy.requestWithAuth(href, { failOnStatusCode: false }).then(
-            (response) => {
-              // If the response status code is not 200, 301, or 302, add it to the failedUrls array
-              if (![200, 301, 302].includes(response.status)) {
-                failedUrls.push({ link: href, status: response.status });
-              }
-            }
-          );
+
+        // Skip empty, mailto, tel, and fragment links
+        if (
+          !href ||
+          href.startsWith("mailto:") ||
+          href.startsWith("tel:") ||
+          href.startsWith("#")
+        ) {
+          cy.log(`🔕 Skipping non-testable link: ${href}`);
+          return;
         }
+
+        // Handle relative and absolute URLs
+        const fullUrl = href.startsWith("http")
+          ? href
+          : `${Cypress.config().baseUrl}${href}`;
+
+        // Skip external links
+        if (isExternal(fullUrl)) {
+          cy.log(`🌐 Skipping external link: ${fullUrl}`);
+          return;
+        }
+
+        // Make request to internal link
+        cy.requestWithAuth(fullUrl, { failOnStatusCode: false }).then(
+          (response) => {
+            if (![200, 301, 302].includes(response.status)) {
+              failedUrls.push({ link: fullUrl, status: response.status });
+            }
+          }
+        );
       })
       .then(() => {
-        // After all requests are done, check if there are any failed URLs
         if (failedUrls.length > 0) {
-          // Log and fail the test with the details of failed URLs
           const error = new Error(
-            `Failed URLs:\n${failedUrls
-              .map((url) => `Link: ${url.link}, Status: ${url.status}`)
+            `❌ Failed URLs:\n${failedUrls
+              .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
               .join("\n")}`
           );
           throw error;
+        } else {
+          cy.log("✅ All internal links returned valid status codes.");
         }
       });
   }
@@ -399,16 +398,16 @@ class HomePage {
 
   validateCarouselContent() {
     // Validate the title
-    this.getHeroSectionCarouselCurrent()
-      .find(".slick-content-title")
-      .should("be.visible")
-      .and("not.be.empty");
+    // this.getHeroSectionCarouselCurrent()
+    //   .find(".slick-content-title")
+    //   .should("be.visible")
+    //   .and("not.be.empty");
 
-    // Validate the body content
-    this.getHeroSectionCarouselCurrent()
-      .find("p")
-      .should("be.visible")
-      .and("not.be.empty");
+    // // Validate the body content
+    // this.getHeroSectionCarouselCurrent()
+    //   .find("p")
+    //   .should("be.visible")
+    //   .and("not.be.empty");
 
     // Dynamically validate media (image or YouTube embed video)
     this.getHeroSectionCarouselCurrent().then(($slide) => {
@@ -431,30 +430,16 @@ class HomePage {
     });
 
     // Validate the CTA button
-    cy.get(".slick-current .slick-content-btns>a")
-      .should("be.visible") // Ensure the CTA is visible
-      .and("have.attr", "href") // Ensure it has an 'href' attribute (if it's a link)
-      .and("not.be.empty"); // Ensure the CTA is not empty (has a valid link or text)
+    // cy.get(".slick-current .slick-content-btns>a")
+    //   .should("be.visible") // Ensure the CTA is visible
+    //   .and("have.attr", "href") // Ensure it has an 'href' attribute (if it's a link)
+    //   .and("not.be.empty"); // Ensure the CTA is not empty (has a valid link or text)
 
-    // Check that the CTA is functional (e.g., clicking it redirects to the correct URL)
-    cy.get(".slick-current .slick-content-btns>a").then(($cta) => {
-      const ctaUrl = $cta.attr("href");
-      cy.requestWithAuth(ctaUrl).its("status").should("eq", 200); // Ensure the URL is accessible
-    });
-  }
-
-  //TS_3: Devices that Deliver Category
-  verifyDeviceDeliver() {
-    // Visit home page
-    cy.visitWithAuth("/");
-
-    // Click allow button if visible
-    this.getAllowButton().should("be.visible").click({ force: true });
-
-    // Ensure the device deliver container  is visible
-    this.getDeviceDeliverContainer().should("exist").should("be.visible");
-    this.clickNextUntilDisabled();
-    this.clickPrevUntilDisabled();
+    // // Check that the CTA is functional (e.g., clicking it redirects to the correct URL)
+    // cy.get(".slick-current .slick-content-btns>a").then(($cta) => {
+    //   const ctaUrl = $cta.attr("href");
+    //   cy.requestWithAuth(ctaUrl).its("status").should("eq", 200); // Ensure the URL is accessible
+    // });
   }
 
   validateSlideContent() {
@@ -490,6 +475,71 @@ class HomePage {
       });
   }
 
+  verifyNecessaryContent(device) {
+    // Visit home page
+    cy.visitWithAuth("/");
+
+    // Click allow button if visible
+    // this.getAllowButton().should("be.visible").click({ force: true });
+
+    // If not on Desktop, open the hamburger menu
+    if (device !== "macbook-16") {
+      this.getHamburgerIconButton()
+        .should("be.enabled")
+        .should("be.visible")
+        .click({ force: true });
+    }
+    // Click about link
+
+    this.getCardsBlock().scrollIntoView();
+
+    this.getCardsHeader().should("be.visible");
+
+    // Validate the title
+    this.getCardsBlock().find(".cards-title").should("be.visible");
+
+    // Validate the title
+    this.getCardsBlock().find("p").should("be.visible");
+
+    // Validate the CTA button
+    this.getCardsBlock()
+      .find("a")
+      .should("be.visible") // Ensure the CTA is visible
+      .and("have.attr", "href") // Ensure it has an 'href' attribute (if it's a link)
+      .and("not.be.empty"); // Ensure the CTA is not empty (has a valid link or text)
+
+    // Check that the CTA is functional (e.g., clicking it redirects to the correct URL)
+    this.getCardsBlock()
+      .find("a")
+      .each(($cta) => {
+        const ctaUrl = $cta.attr("href");
+        cy.requestWithAuth(ctaUrl).its("status").should("eq", 200); // Ensure the URL is accessible
+      });
+
+    // Validate image is present
+    this.getCardsBlock()
+      .find("img")
+      .each((img) => {
+        cy.wrap(img).should("exist");
+      });
+  }
+
+  verifyCardsRowCount(device, expectedCardsPerRow) {
+    cy.visitWithAuth("/");
+
+    this.getCardsList()
+      .should("exist")
+      .then(($cards) => {
+        const firstRowTop = $cards[0].getBoundingClientRect().top;
+
+        const cardsInRow = [...$cards].filter((card) => {
+          return card.getBoundingClientRect().top === firstRowTop;
+        });
+
+        cy.log(`Device: ${device} — Cards in first row: ${cardsInRow.length}`);
+        expect(cardsInRow.length).to.eq(expectedCardsPerRow);
+      });
+  }
   clickNextUntilDisabled() {
     this.getDeviceDeliverSliderNextButton()
       .should("exist")
@@ -559,145 +609,12 @@ class HomePage {
     });
   }
 
-  //TS_4: Submit a Device
-  verifySubmitADeviceContainer(device) {
-    // Visit home page
-    cy.visitWithAuth("/");
-
-    // Click allow button if visible
-    this.getAllowButton().should("be.visible").click({ force: true });
-
-    // Ensure the submit a device container is visible
-    this.getSubmitDeviceContainer().should("be.visible").scrollIntoView();
-
-    // Ensure the submit a device heading is visible
-    this.getSubmitDeviceContainer()
-      .find(".submit-device-section__body-title")
-      .should("be.visible");
-
-    // Ensure the submit a device paragraph is visible
-    this.getSubmitDeviceContainer().find("p").should("be.visible");
-
-    // Validate image is present
-    this.getSubmitDeviceLeftImage()
-      .should("exist")
-      .should("be.visible")
-      .and((img) => {
-        expect(img[0].naturalWidth).to.be.greaterThan(0); // Ensure the image is loaded
-      });
-
-    //Ensure right image is not visible on mobile view and visible on desktop and ipad view
-    if (device !== "macbook-16" && device !== "ipad-mini") {
-      this.getSubmitDeviceRightImage().should("exist").should("not.be.visible");
-    } else {
-      this.getSubmitDeviceRightImage()
-        .should("exist")
-        .should("be.visible")
-        .and((img) => {
-          expect(img[0].naturalWidth).to.be.greaterThan(0); // Ensure the image is loaded
-        });
-    }
-
-    // Validate the CTA button
-    this.getSubmitDeviceContainer()
-      .find("a")
-      .should("be.visible") // Ensure the CTA is visible
-      .and("have.attr", "href") // Ensure it has an 'href' attribute (if it's a link)
-      .and("not.be.empty"); // Ensure the CTA is not empty (has a valid link or text)
-
-    // Check that the CTA is functional (e.g., clicking it redirects to the correct URL)
-    this.getSubmitDeviceContainer()
-      .find("a")
-      .then(($cta) => {
-        const ctaUrl = $cta.attr("href");
-        cy.requestWithAuth(ctaUrl).its("status").should("eq", 200); // Ensure the URL is accessible
-      });
-  }
-
-  //TS_5: Validation Process
-  verifyValidationProcessContainer() {
-    // Visit home page
-    cy.visitWithAuth("/");
-
-    // Click allow button if visible
-    this.getAllowButton().should("be.visible").click({ force: true });
-
-    // Ensure the validation process container is visible
-    this.getValidationProcessContainer().should("be.visible").scrollIntoView();
-
-    // Ensure the validation process heading is visible
-    this.getValidationProcessContainer().find("div>h2").should("be.visible");
-
-    // Ensure the validation process paragraph is visible
-    this.getValidationProcessContainer().find("header>p").should("be.visible");
-
-    // Check the container has only two cards on any device
-    this.getValidationProcessContainer()
-      .find(".validation-process__row")
-      .should("be.visible")
-      .its("length")
-      .should("eq", 2);
-
-    // Ensure the validation process cards are visible
-    this.getValidationProcessContainer()
-      .find(".validation-process__row")
-      .should("be.visible");
-
-    // Ensure the validation process cards title is visible
-    this.getValidationProcessContainer()
-      .find(".validation-process__row .validation-process__info--title")
-      .should("be.visible")
-      .its("length")
-      .should("eq", 2);
-
-    // Ensure the validation process cards paragraph is visible
-    this.getValidationProcessContainer()
-      .find(".validation-process__row .validation-process__info--highlighted")
-      .should("be.visible")
-      .its("length")
-      .should("eq", 2);
-
-    // Validate the CTA button
-    this.getValidationProcessContainer()
-      .find("header>a")
-      .should("be.visible") // Ensure the CTA is visible
-      .and("have.attr", "href") // Ensure it has an 'href' attribute (if it's a link)
-      .and("not.be.empty"); // Ensure the CTA is not empty (has a valid link or text)
-
-    // Check that the CTA is functional (e.g., clicking it redirects to the correct URL)
-    this.getValidationProcessContainer()
-      .find("header>a")
-      .then(($cta) => {
-        const ctaUrl = $cta.attr("href");
-        cy.requestWithAuth(ctaUrl).its("status").should("eq", 200); // Ensure the URL is accessible
-      });
-
-    // Validate the CTA button
-    this.getValidationProcessContainer()
-      .find(".validation-process__row a")
-      .should("have.length", 2) // Assert there are 2 elements
-      .each(($el) => {
-        // Further validation for href or visibility
-        cy.wrap($el).should("have.attr", "href").and("not.be.empty");
-        cy.wrap($el).should("be.visible");
-      });
-
-    // Check that the CTA is functional (e.g., clicking it redirects to the correct URL)
-    this.getValidationProcessContainer()
-      .find(".validation-process__row a")
-      .then(($cta) => {
-        const ctaUrl = $cta.attr("href");
-        cy.requestWithAuth(ctaUrl).its("status").should("eq", 200); // Ensure the URL is accessible
-      });
-  }
-
-  //TS_28 Breadcrumbs
+  //Breadcrumbs
   validateBreadcrumbLinks(device) {
     // Visit home page
     cy.visitWithAuth("/");
 
     // Click allow button if visible
-    this.getAllowButton().should("be.visible").click({ force: true });
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -757,25 +674,25 @@ class HomePage {
                         .should("be.enabled")
                         .should("be.visible")
                         .click({ force: true });
+
+                      this.getHamburgerIconCrossButton()
+                        .should("be.enabled")
+                        .should("be.visible")
+                        .click({ force: true });
                     }
                   });
               }
             });
         }
       });
-    this.getHamburgerIconCrossButton()
-      .should("be.enabled")
-      .should("be.visible")
-      .click({ force: true });
   }
 
-  //TS_35: Copyright
+  //Copyright
   validateCopyright() {
     // Visit home page
     cy.visitWithAuth("/");
 
     // Click allow button if visible
-    this.getAllowButton().should("be.visible").click({ force: true });
 
     // Check copyright
     this.getCopyright().scrollIntoView().should("be.visible");

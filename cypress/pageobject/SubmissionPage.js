@@ -15,7 +15,7 @@ class SubmissionPage {
   }
 
   getDownloadLink() {
-    return cy.get("a[download]");
+    return cy.get(".partner-cta a");
   }
 
   getFooterCopyright() {
@@ -48,12 +48,9 @@ class SubmissionPage {
   }
 
   getHamburgerIconButton() {
-    return cy.get("#block-vdl-headerlogos button#mobile-menu");
+    return cy.get(".menu-toggle");
   }
 
-  getSubmissionLink() {
-    return cy.get("header li>a[href='/submission']");
-  }
 
   //TS_23: Submission Disclaimer
   getSubmissionDisclaimer() {
@@ -149,10 +146,10 @@ class SubmissionPage {
 
   verifyDownloadVDLCriteria(device) {
     // Visit home page
-    cy.visitWithAuth("/");
+    cy.visitWithAuth("/conference-on-physician-health-information/past-conference-resources");
 
     // Click allow button if visible
-    this.getAllowButton().should("be.visible").click({ force: true });
+    // this.getAllowButton().should("be.visible").click({ force: true });
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -162,11 +159,9 @@ class SubmissionPage {
         .click({ force: true });
     }
     // Click submission link
-    this.getSubmissionLink().should("exist").click({ force: true });
 
-    this.getDownloadLink().scrollIntoView();
-    this.getDownloadLink().then((btn) => {
-      cy.wrap(btn).should("exist").click({ force: true });
+    this.getDownloadLink().each((btn) => {
+      cy.wrap(btn).scrollIntoView().should("exist").click({ force: true });
       cy.verifyDownload(".pdf", { contains: true, timeout: 60000 });
       assert.ok("PDF Downloading successfully!");
     });

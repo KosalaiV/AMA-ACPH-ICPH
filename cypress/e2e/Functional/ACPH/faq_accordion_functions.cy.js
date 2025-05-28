@@ -4,7 +4,7 @@ Contact Page TS_32: FAQ Block:-
 TC_69: Verify accordions expand and collapse as expected and validate the inner content on expand
 */
 
-import contactPage from "../../../pageobject/ContactPage";
+import faqPage from "../../../pageobject/FAQPage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +14,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Verification of Contact Page TS 32 FAQ Block", () => {
+describe("FAQ - Accordion Expand/Collapse Functionality", () => {
   viewports.forEach(({ device, viewport }) => {
     it(`Verify accordions expand and collapse as expected on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      contactPage.verifyAccordionFunctions(device);
+      faqPage.verifyAccordionFunctions(device);
     });
   });
 });

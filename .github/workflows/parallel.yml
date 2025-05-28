@@ -1,46 +1,3 @@
-# name: test-automation
-
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       testing-type:
-#         type: choice
-#         description: "Select the testing type: "
-#         options:
-#           - Functional
-#           - Visual
-#         required: true
-#       browser-type:
-#         type: choice
-#         description: "Select the browser: "
-#         options:
-#           - chrome
-#           - firefox
-#           - edge
-#         required: true
-#       env-type:
-#         type: choice
-#         description: "Select the environment: "
-#         options:
-#           - prod
-#           - stage
-#           - dev
-#         required: true
-
-# jobs:
-#   split:
-#     uses: ./.github/workflows/reusable.yml
-#     with:
-#       n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 10 }} # Set n to 1 for Visual, otherwise 10
-#       marge: true
-#       working-directory: "test-automation"
-#       command: ${{ github.event.inputs['testing-type'] == 'Visual' && 'npx percy exec -- cypress run --spec cypress/e2e/Visual/*.cy.js --env environment=prod' || format('npx cypress run --headed --spec cypress/e2e/{0}/*.cy.js --env environment={1} --browser {2}', github.event.inputs['testing-type'], github.event.inputs['env-type'], github.event.inputs['browser-type']) }}
-
-#     secrets:
-#       CYPRESS_username: ${{secrets.CYPRESS_USERNAME}}
-#       CYPRESS_password: ${{secrets.CYPRESS_PASSWORD}}
-#       PERCY_TOKEN: ${{secrets.PERCY_TOKEN}}
-
 name: test-automation
 
 on:
@@ -59,7 +16,15 @@ on:
         description: "Select the testing type:"
         options:
           - Functional
-          - Visual
+        required: true
+
+      browser-type:
+        type: choice
+        description: "Select the browser:"
+        options:
+          - chrome
+          - firefox
+          - edge
         required: true
 
       env-type:
@@ -72,121 +37,20 @@ on:
         required: true
 
 jobs:
-  chrome-desktop:
+  split:
     uses: ./.github/workflows/reusable.yml
     with:
-      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
-      browser: chrome
+      n: 10
       marge: true
-      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
+      working-directory: "test-automation"
       command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
-        inputs.prefix,
-        github.event.inputs.testing-type,
-        github.event.inputs.website,
-        github.event.inputs.env-type,
-        github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
+        'npx cypress run --headed --spec cypress/e2e/{0}/*.cy.js --env environment={1} --browser {2} --config-file {3}',
+        github.event.inputs['testing-type'],
+        github.event.inputs['env-type'],
+        github.event.inputs['browser-type'],
+        github.event.inputs['website'] == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
        ) }}
-    secrets: inherit
-
-  firefox-desktop:
-    uses: ./.github/workflows/reusable.yml
-    with:
-      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
-      browser: firefox
-      marge: true
-      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser firefox --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
-        inputs.prefix,
-        github.event.inputs.testing-type,
-        github.event.inputs.website,
-        github.event.inputs.env-type,
-        github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
-       ) }}
-    secrets: inherit
-
-  edge-desktop:
-    uses: ./.github/workflows/reusable.yml
-    with:
-      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
-      browser: edge
-      marge: true
-      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser edge --env environment={3},viewportWidth=1280,viewportHeight=720 --config-file {4}',
-        inputs.prefix,
-        github.event.inputs.testing-type,
-        github.event.inputs.website,
-        github.event.inputs.env-type,
-        github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
-       ) }}
-    secrets: inherit
-
-  iphone-chrome:
-    uses: ./.github/workflows/reusable.yml
-    with:
-      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
-      browser: chrome
-      marge: false
-      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=390,viewportHeight=844 --config-file {4}',
-        inputs.prefix,
-        github.event.inputs.testing-type,
-        github.event.inputs.website,
-        github.event.inputs.env-type,
-        github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
-       ) }}
-    secrets: inherit
-
-  android-chrome:
-    uses: ./.github/workflows/reusable.yml
-    with:
-      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
-      browser: chrome
-      marge: false
-      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=412,viewportHeight=915 --config-file {4}',
-        inputs.prefix,
-        github.event.inputs.testing-type,
-        github.event.inputs.website,
-        github.event.inputs.env-type,
-        github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
-       ) }}
-    secrets: inherit
-
-  ipad-chrome:
-    uses: ./.github/workflows/reusable.yml
-    with:
-      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
-      browser: chrome
-      marge: false
-      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=820,viewportHeight=1180 --config-file {4}',
-        inputs.prefix,
-        github.event.inputs.testing-type,
-        github.event.inputs.website,
-        github.event.inputs.env-type,
-        github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
-       ) }}
-    secrets: inherit
-
-  tab-chrome:
-    uses: ./.github/workflows/reusable.yml
-    with:
-      n: ${{ github.event.inputs.testing-type == 'Visual' && 1 || 7 }}
-      browser: chrome
-      marge: false
-      prefix: ${{ github.event.inputs.testing-type == 'Visual' && 'percy exec -- ' || '' }}
-      command: ${{ format(
-        'npx {0}cypress run --spec cypress/e2e/{1}/{2}/*.cy.js --browser chrome --env environment={3},viewportWidth=768,viewportHeight=1024 --config-file {4}',
-        inputs.prefix,
-        github.event.inputs.testing-type,
-        github.event.inputs.website,
-        github.event.inputs.env-type,
-        github.event.inputs.website == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
-       ) }}
-    secrets: inherit
+    secrets:
+      CYPRESS_username: ${{ secrets.CYPRESS_USERNAME }}
+      CYPRESS_password: ${{ secrets.CYPRESS_PASSWORD }}
+      PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}

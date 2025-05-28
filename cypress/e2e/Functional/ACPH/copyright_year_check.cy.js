@@ -1,10 +1,10 @@
 /*
-Contact Page TS_32: FAQ Block:-
+Home Page TS_35: Copyright:-
 
-TC_68: Ensure the default position of accordions is collapsed
+TC_72: Verify the copyright is visible and check the current year
 */
 
-import faqPage from "../../../pageobject/FAQPage";
+import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +14,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("FAQ - Accordion Default State", () => {
+describe("Home - Copyright Validation", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Ensure the default position of accordions is collapsed on ${device}`, () => {
+    it(`Verify the copyright is visible and check the current year on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      faqPage.verifyDefaultAccordionPosition(device);
+      homePage.validateCopyright();
     });
   });
 });

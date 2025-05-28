@@ -3,17 +3,24 @@ import "cypress-real-events";
 const username = Cypress.env("username");
 const password = Cypress.env("password");
 
-// Helper function to check if the environment requires authentication
+// Helper to determine if basic auth is needed
 const shouldUseAuth = () => Cypress.env("environment") !== "prod";
 
-// Custom command for visit with conditional authentication
 Cypress.Commands.add("visitWithAuth", (url) => {
-  const authOptions = shouldUseAuth()
-    ? { auth: { username, password }, failOnStatusCode: false }
-    : { failOnStatusCode: false };
+  const authOptions = {
+    failOnStatusCode: false, // ✅ Always include this
+  };
+
+  if (shouldUseAuth()) {
+    authOptions.auth = {
+      username,
+      password,
+    };
+  }
 
   cy.visit(url, authOptions);
 });
+
 
 
 // Custom command for request with conditional authentication

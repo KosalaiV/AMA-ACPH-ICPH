@@ -1,10 +1,10 @@
 /*
-Contact Page TS_32: FAQ Block:-
+Home Page TS_1: Home Page:-
 
-TC_68: Ensure the default position of accordions is collapsed
+TC_2: Verify footer navigation links redirects to the right page 
 */
 
-import faqPage from "../../../pageobject/FAQPage";
+import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +14,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("FAQ - Accordion Default State", () => {
+describe("Home - Footer Navigation Link Redirection & Active Tab Styling", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Ensure the default position of accordions is collapsed on ${device}`, () => {
+    it(`Verify footer navigation links redirect to the right page on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      faqPage.verifyDefaultAccordionPosition(device);
+      homePage.verifyFooterJumplinkRedirections();
     });
   });
 });

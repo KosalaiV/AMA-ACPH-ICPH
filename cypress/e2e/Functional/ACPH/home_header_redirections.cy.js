@@ -1,8 +1,8 @@
 /*
-Home Page TS_2: Hero Section:-
+Home Page TS_1: Home Page:-
 
-TC_5: Verify carousel functions as expected 
-TC_6: Verify each carousel has heading, paragraph, image/video and CTA linked to it is accessible
+TC_1: Verify header navigation links redirects to the right page and check the background for active tab
+TC_3: Verify hamburger icon functions as expected and check for navigation links redirections
 */
 
 import homePage from "../../../pageobject/HomePage";
@@ -15,15 +15,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Home - Hero Section Carousel Functionality", () => {
+describe("Home - Header Navigation Link Redirection & Active Tab Styling", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Verify carousel functions as expected and has relevant content in it on ${device}`, () => {
+    it(`Verify header navigation links redirect to the right page and check the background for active tab on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      // Wait for the slider to be visible
-
-
-      homePage.verifyHeroSectionCarousel();
+      homePage.verifyHeaderJumplinkRedirections(device);
     });
   });
 });
