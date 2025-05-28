@@ -2,7 +2,7 @@ const { defineConfig } = require("cypress");
 const { verifyDownloadTasks } = require("cy-verify-downloads");
 
 //comment out this line when running in local
-// const cypressSplit = require("cypress-split");
+const cypressSplit = require("cypress-split");
 
 const environments = {
   prod: "https://ps2sites:ps2sites$321@icph-prod-cf.test-ama-assn.org",
@@ -44,7 +44,7 @@ module.exports = defineConfig({
       on("task", verifyDownloadTasks);
 
       //comment out this line when running in local
-      // cypressSplit(on, config);
+      cypressSplit(on, config);
 
       const env = config.env.environment || "stage"; // Default to 'stage' if no environment is provided
       config.baseUrl = environments[env]; // Dynamically set the base URL based on the environment
