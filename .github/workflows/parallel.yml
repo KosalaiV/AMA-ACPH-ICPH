@@ -41,7 +41,7 @@ jobs:
   split:
     uses: ./.github/workflows/reusable.yml
     with:
-      n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 10 }}
+      n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 7 }}
       marge: true
       # working-directory: "test-automation"
       command: ${{ format(
