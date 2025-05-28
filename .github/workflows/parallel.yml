@@ -16,6 +16,7 @@ on:
         description: "Select the testing type:"
         options:
           - Functional
+          - Visual
         required: true
 
       browser-type:
@@ -40,7 +41,7 @@ jobs:
   split:
     uses: ./.github/workflows/reusable.yml
     with:
-      n: 10
+      n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 10 }} # Set n to 1 for Visual, otherwise 10
       marge: true
       working-directory: "test-automation"
       command: ${{ format(
