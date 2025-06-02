@@ -57,8 +57,6 @@
 #       CYPRESS_password: ${{ secrets.CYPRESS_PASSWORD }}
 #       PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
-
-
 name: test-automation
 
 on:
@@ -66,67 +64,55 @@ on:
     inputs:
       website:
         type: choice
-        description: "Select the website:"
-        options:
-          - ACPH
-          - ICPH
+        options: [ACPH, ICPH]
         required: true
-
       testing-type:
         type: choice
-        description: "Select the testing type:"
-        options:
-          - Functional
-          - Visual
+        options: [Functional, Visual]
         required: true
-
       browser-type:
         type: choice
-        description: "Select the browser:"
-        options:
-          - chrome
-          - firefox
-          - edge
+        options: [chrome, firefox, edge]
         required: true
-
       env-type:
         type: choice
-        description: "Select the environment:"
-        options:
-          - prod
-          - stage
-          - dev
+        options: [prod, stage, dev]
         required: true
 
 jobs:
+  set-params:
+    runs-on: ubuntu-latest
+    outputs:
+      command: ${{ steps.set-command.outputs.command }}
+      spec: ${{ steps.set-command.outputs.spec }}
+    steps:
+      - id: set-command
+        run: |
+          if [[ "${{ github.event.inputs.testing-type }}" == "Visual" ]]; then
+            if [[ "${{ github.event.inputs.website }}" == "ACPH" ]]; then
+              echo "command=npx percy exec -- cypress run --spec cypress/e2e/Visual/acph_percy.cy.js --env environment=${{ github.event.inputs.env-type }} --config-file cypress.acph.config.js" >> "$GITHUB_OUTPUT"
+            else
+              echo "command=npx percy exec -- cypress run --spec cypress/e2e/Visual/icph_percy.cy.js --env environment=${{ github.event.inputs.env-type }} --config-file cypress.icph.config.js" >> "$GITHUB_OUTPUT"
+            fi
+            echo "spec=" >> "$GITHUB_OUTPUT"
+          else
+            config_file=$([[ "${{ github.event.inputs.website }}" == "ACPH" ]] && echo "cypress.acph.config.js" || echo "cypress.icph.config.js")
+            echo "command=npx cypress run --env environment=${{ github.event.inputs.env-type }} --browser ${{ github.event.inputs.browser-type }} --config-file $config_file" >> "$GITHUB_OUTPUT"
+            echo "spec=cypress/e2e/Functional/${{ github.event.inputs.website }}/*.cy.js" >> "$GITHUB_OUTPUT"
+          fi
+
   split:
+    needs: set-params
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 7 }}
       marge: true
-
-      command: ${{ 
-        github.event.inputs['testing-type'] == 'Visual' &&
-          (
-            github.event.inputs['website'] == 'ACPH' &&
-            format('npx percy exec -- cypress run --spec cypress/e2e/Visual/acph_percy.cy.js --env environment={0} --config-file cypress.acph.config.js', github.event.inputs['env-type']) ||
-            format('npx percy exec -- cypress run --spec cypress/e2e/Visual/icph_percy.cy.js --env environment={0} --config-file cypress.icph.config.js', github.event.inputs['env-type'])
-          ) ||
-        format(
-          'npx cypress run --env environment={0} --browser {1} --config-file {2}',
-          github.event.inputs['env-type'],
-          github.event.inputs['browser-type'],
-          github.event.inputs['website'] == 'ACPH' && 'cypress.acph.config.js' || 'cypress.icph.config.js'
-        )
-      }}
-
-      spec: ${{ github.event.inputs['testing-type'] == 'Functional' && format('cypress/e2e/Functional/{0}/*.cy.js', github.event.inputs['website']) || '' }}
-
+      command: ${{ needs.set-params.outputs.command }}
+      spec: ${{ needs.set-params.outputs.spec }}
     secrets:
       CYPRESS_username: ${{ secrets.CYPRESS_USERNAME }}
       CYPRESS_password: ${{ secrets.CYPRESS_PASSWORD }}
       PERCY_TOKEN: ${{ github.event.inputs.website == 'ACPH' && secrets.ACPH_PERCY_TOKEN || secrets.ICPH_PERCY_TOKEN }}
-
 
 
 
