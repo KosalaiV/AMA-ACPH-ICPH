@@ -762,10 +762,6 @@ jobs:
         # https://github.com/actions/download-artifact/issues/103
         with:
           path: ${{ inputs.working-directory }}/split-results
-      - name: Display structure of downloaded files
-        run: |
-
-          ls -R split-results
 
       - name: Prepare folder
         run: |
