@@ -5,7 +5,7 @@ const { verifyDownloadTasks } = require("cy-verify-downloads");
 const cypressSplit = require("cypress-split");
 
 const environments = {
-  prod: "https://ps2sites:ps2sites$321@acph-prod-cf.test-ama-assn.org",
+  prod: "https://acph-prod-cf.test-ama-assn.org",
   stage: "https://acph-test-cf.test-ama-assn.org",
   dev: "https://acph-dev-cf.test-ama-assn.org",
 };

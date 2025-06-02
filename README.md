@@ -1,4 +1,4 @@
-# AMA VDL Automated Testing 🚀
+# AMA Multisites Automated Testing 🚀
 
 This project aims to facilitate automated functional and visual checklists in the CI pipeline, reducing testing time and preventing production deployment issues.
 

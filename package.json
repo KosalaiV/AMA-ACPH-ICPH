@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "stage-run": "cypress run --headed --env environment=stage --browser chrome",
+    "stage-run": "cypress run --headed --env environment=dev --spec cypress/e2e/Functional/ACPH/*.cy.js --browser chrome --config-file cypress.acph.config.js",
     "acph-dev-open": "cypress open --env environment=dev --config-file cypress.acph.config.js",
     "acph-stage-open": "cypress open --env environment=stage --config-file cypress.acph.config.js",
     "acph-prod-open": "cypress open --env environment=prod --config-file cypress.acph.config.js",

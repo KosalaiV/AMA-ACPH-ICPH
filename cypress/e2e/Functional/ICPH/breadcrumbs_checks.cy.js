@@ -1,9 +1,3 @@
-/*
-Breadcrumb Page TS_28: Breadcrumbs:-
-
-TC_61: Verify breadcrumb functions as expected
-*/
-
 import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
@@ -14,9 +8,9 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Verification of Breadcrumb Page TS 28 Breadcrumbs", () => {
+describe("Home - Verification of Breadcrumb Function", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`TC_61: Verify breadcrumb functions as expected on ${device}`, () => {
+    it(`Verify breadcrumb functions as expected on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
       homePage.validateBreadcrumbLinks(device);

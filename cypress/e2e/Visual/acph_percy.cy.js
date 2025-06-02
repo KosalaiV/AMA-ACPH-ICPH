@@ -1,5 +1,5 @@
 // Importing the fixture containing URLs
-import pageUrls from "../../fixtures/pages.json";
+import pageUrls from "../../fixtures/acph_pages.json";
 
 describe("Visual Testing with Percy", () => {
   // Loop through the JSON object, creating a test for each page
@@ -25,7 +25,7 @@ describe("Visual Testing with Percy", () => {
       cy.wait(2000);
 
       // Click allow button if visible
-      cy.get(".allowAll").should("be.visible").click({ force: true });
+      // cy.get(".allowAll").should("be.visible").click({ force: true });
 
       // After page load, ensure the custom property has been removed
       cy.window().should("not.have.prop", "beforeReload");

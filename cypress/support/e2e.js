@@ -60,6 +60,6 @@ Cypress.on('test:after:run', (test, runnable) => {
       `../screenshots/${Cypress.spec.name}/${filename}`,
     )
     //Add video if needed
-    // addContext({ test }, `../videos/${Cypress.spec.name}.mp4`)
+    addContext({ test }, `../videos/${Cypress.spec.name}.mp4`)
   }
 })

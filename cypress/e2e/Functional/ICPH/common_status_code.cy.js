@@ -2,7 +2,7 @@ import homePage from "../../../pageobject/HomePage";
 
 const pagesToTest = [
   { name: "Home", path: "/" },
-  { name: "About Us", path: "/about-acph" },
+  { name: "About Us", path: "/about-icph" },
   {
     name: "Registration",
     path: "/conference-on-physician-health-information/registration-options-and-inclusions",

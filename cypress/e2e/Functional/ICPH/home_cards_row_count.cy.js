@@ -7,9 +7,9 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini", expectedCardsPerRow: 2 }, // Tablet
 ];
 
-describe("Verification of Contact Page TS 32 FAQ Block", () => {
+describe("Home - Verification of Cards Block Row Count Across Devices", () => {
   viewports.forEach(({ device, viewport, expectedCardsPerRow }) => {
-    it(`should display ${expectedCardsPerRow} card(s) per row on ${device}`, () => {
+    it(`Should display ${expectedCardsPerRow} card(s) per row on ${device}`, () => {
       cy.viewport(viewport);
       // Visit home page
       homePage.verifyCardsRowCount(device, expectedCardsPerRow);

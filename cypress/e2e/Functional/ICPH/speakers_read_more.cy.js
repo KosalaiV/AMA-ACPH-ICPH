@@ -1,4 +1,4 @@
-import faqPage from "../../../pageobject/FAQPage";
+import conferencePage from "../../../pageobject/ConferencePage";
 
 // Viewports to test with
 const viewports = [
@@ -8,12 +8,15 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("FAQ - Accordion Expand/Collapse Functionality", () => {
+describe("Speakers - Read More and Read Less Functionality", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Verify accordions expand and collapse as expected on ${device}`, () => {
+    it(`Ensure the read more and read less works as expected in ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      faqPage.verifyAccordionFunctions(device);
+      conferencePage.verifyReadMoreFunction(
+        "/conference-speakers",
+        device
+      );
     });
   });
 });

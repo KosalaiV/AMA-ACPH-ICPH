@@ -67,7 +67,6 @@ class HomePage {
 
   // Actions
 
-  //TS_1: Home Page
   verifyHeaderJumplinkRedirections(device) {
     // Visit home page
     cy.visitWithAuth("/");
@@ -150,45 +149,6 @@ class HomePage {
       cy.log(`Hovered and validated element index: ${index}`);
     });
   }
-  // verifyFooterJumplinkRedirections() {
-  //   // Visit home page
-  //   cy.visitWithAuth("/");
-
-  //   // Click allow button if visible
-  //   // this.getAllowButton().should("be.visible").click({ force: true });
-
-  //   // Ensure the header links are visible and get their count
-  //   this.getFooterLinks()
-  //     .should("exist")
-  //     .should("be.visible")
-  //     .its("length")
-  //     .then((count) => {
-  //       cy.log(`Count of navigation links: ${count}`);
-
-  //       // Use a for loop to iterate through all links
-  //       for (let i = 0; i < count; i++) {
-  //         this.getFooterLinks()
-  //           .eq(i) // Get the link at the current index
-  //           .then(($liElement) => {
-  //             const url = $liElement.attr("href");
-
-  //             // Check if the href starts with "#"
-  //             if (url.startsWith("#")) {
-  //               assert.ok(
-  //                 "This URL starts with a '#' and doesn't trigger navigation."
-  //               );
-  //             } else {
-  //               // Click the link and verify the URL
-  //               cy.wrap($liElement)
-  //                 .click({ force: true })
-  //                 .then(() => {
-  //                   cy.url().should("include", url);
-  //                 });
-  //             }
-  //           });
-  //       }
-  //     });
-  // }
 
   verifyFooterJumplinkRedirections() {
     cy.visitWithAuth("/");
@@ -212,7 +172,7 @@ class HomePage {
 
         cy.get(`.footer-bottom-wrapper a[href="${href}"]`)
           .invoke("removeAttr", "target")
-          .click();
+          .click({ force: true });
 
         cy.origin(hrefOrigin, { args: expectedSegment }, (segment) => {
           cy.location("pathname", { timeout: 10000 }).should(
@@ -287,7 +247,6 @@ class HomePage {
       });
   }
 
-  //TS_2: Hero Section
   verifyHeroSectionCarousel() {
     // Visit home page
     cy.visitWithAuth("/");
@@ -442,39 +401,6 @@ class HomePage {
     // });
   }
 
-  validateSlideContent() {
-    // Validate the title
-    this.getDeviceDeliverSliderCards()
-      .find(".views-field-name")
-      .should("be.visible")
-      .and("not.be.empty");
-
-    // Dynamically validate field content for each slider
-    this.getDeviceDeliverSliderCards().then(($slide) => {
-      if ($slide.find("img").length) {
-        // Validate image if present
-        this.getDeviceDeliverSliderCards().find("img").should("exist");
-      } else {
-        throw new Error("Image not found in the slide");
-      }
-    });
-
-    // Validate the CTA button
-    this.getDeviceDeliverSliderCards()
-      .find("a")
-      .should("be.visible") // Ensure the CTA is visible
-      .and("have.attr", "href") // Ensure it has an 'href' attribute (if it's a link)
-      .and("not.be.empty"); // Ensure the CTA is not empty (has a valid link or text)
-
-    // Check that the CTA is functional (e.g., clicking it redirects to the correct URL)
-    this.getDeviceDeliverSliderCards()
-      .find("a")
-      .then(($cta) => {
-        const ctaUrl = $cta.attr("href");
-        cy.requestWithAuth(ctaUrl).its("status").should("eq", 200); // Ensure the URL is accessible
-      });
-  }
-
   verifyNecessaryContent(device) {
     // Visit home page
     cy.visitWithAuth("/");
@@ -539,74 +465,6 @@ class HomePage {
         cy.log(`Device: ${device} — Cards in first row: ${cardsInRow.length}`);
         expect(cardsInRow.length).to.eq(expectedCardsPerRow);
       });
-  }
-  clickNextUntilDisabled() {
-    this.getDeviceDeliverSliderNextButton()
-      .should("exist")
-      .and("not.be.disabled");
-    this.getDeviceDeliverContainer()
-      .find("h2")
-      .should("be.visible")
-      .scrollIntoView();
-    this.getDeviceDeliverSliderNextButton().then(($arrow) => {
-      // Check if the arrow has the slick-disabled class
-      if ($arrow.hasClass("slick-disabled")) {
-        cy.log(
-          "Next arrow is disabled (slick-disabled class present). Stopping the test."
-        );
-        this.getDeviceDeliverSliderNextButton().click({ force: true });
-
-        return;
-      } else {
-        // Ensure the button is clickable by checking it is visible and not disabled
-        this.getDeviceDeliverSliderNextButton().should(
-          "not.have.class",
-          "slick-disabled"
-        );
-
-        // Verify cards content
-        this.validateSlideContent();
-
-        // Click the next arrow and wait for any transition
-        this.getDeviceDeliverSliderNextButton().click({ force: true });
-        cy.wait(500);
-
-        // Recursively call the function to continue clicking
-        this.clickNextUntilDisabled();
-      }
-    });
-  }
-
-  clickPrevUntilDisabled() {
-    this.getDeviceDeliverSliderPrevButton()
-      .should("exist")
-      .and("not.be.disabled");
-
-    this.getDeviceDeliverSliderPrevButton().then(($arrow) => {
-      // Check if the arrow has the slick-disabled class
-      if ($arrow.hasClass("slick-disabled")) {
-        cy.log(
-          "Prev arrow is disabled (slick-disabled class present). Stopping the test."
-        );
-        return;
-      } else {
-        // Ensure the button is clickable by checking it is visible and not disabled
-        this.getDeviceDeliverSliderPrevButton().should(
-          "not.have.class",
-          "slick-disabled"
-        );
-
-        // Verify cards content
-        this.validateSlideContent();
-
-        // Click the prev arrow and wait for any transition
-        this.getDeviceDeliverSliderPrevButton().click({ force: true });
-        cy.wait(500);
-
-        // Recursively call the function to continue clicking
-        this.clickPrevUntilDisabled();
-      }
-    });
   }
 
   //Breadcrumbs

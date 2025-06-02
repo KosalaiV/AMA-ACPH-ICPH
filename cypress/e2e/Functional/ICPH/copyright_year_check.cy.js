@@ -1,10 +1,4 @@
-/*
-Home Page TS_35: Copyright:-
-
-TC_72: Verify the copyright is visible and check the current year
-*/
-
-import homePage from "../../pageobject/HomePage";
+import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
 const viewports = [
@@ -14,7 +8,7 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Verification of Home Page TS 35 Copyright", () => {
+describe("Home - Copyright Validation", () => {
   viewports.forEach(({ device, viewport }) => {
     it(`Verify the copyright is visible and check the current year on ${device}`, () => {
       // Set the viewport for each test case

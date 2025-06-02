@@ -1,4 +1,4 @@
-import faqPage from "../../../pageobject/FAQPage";
+import conferencePage from "../../../pageobject/ConferencePage";
 
 // Viewports to test with
 const viewports = [
@@ -8,12 +8,15 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("FAQ - Accordion Expand/Collapse Functionality", () => {
+describe("Travel Details - Tabbed Interface and Content Validation", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Verify accordions expand and collapse as expected on ${device}`, () => {
+    it(`Should validate active tab background color and relevant content on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      faqPage.verifyAccordionFunctions(device);
+      conferencePage.verifyTabsContent(
+        "/conference-on-physician-health-information/travel-details",
+        "rgb(238, 193, 64)"
+      );
     });
   });
 });

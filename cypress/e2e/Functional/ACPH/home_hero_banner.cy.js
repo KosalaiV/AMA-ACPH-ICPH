@@ -1,10 +1,3 @@
-/*
-Home Page TS_2: Hero Section:-
-
-TC_5: Verify carousel functions as expected 
-TC_6: Verify each carousel has heading, paragraph, image/video and CTA linked to it is accessible
-*/
-
 import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
@@ -20,9 +13,6 @@ describe("Home - Hero Section Carousel Functionality", () => {
     it(`Verify carousel functions as expected and has relevant content in it on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      // Wait for the slider to be visible
-
-
       homePage.verifyHeroSectionCarousel();
     });
   });

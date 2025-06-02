@@ -1,10 +1,4 @@
-/*
-Home Page TS_1: Home Page:-
-
-TC_2: Verify footer navigation links redirects to the right page 
-*/
-
-import homePage from "../../../pageobject/HomePage";
+import conferencePage from "../../../pageobject/ConferencePage";
 
 // Viewports to test with
 const viewports = [
@@ -14,12 +8,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Verification of Home Page TS 1 Home Page", () => {
+describe("Abstracts - Tabbed Interface and Content Validation", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Verify footer navigation links redirect to the right page on ${device}`, () => {
+    it(`Should validate active tab background color and relevant content on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      homePage.verifyFooterJumplinkRedirections();
+      conferencePage.verifyTabsContent("/abstracts", "rgb(238, 193, 64)");
     });
   });
 });

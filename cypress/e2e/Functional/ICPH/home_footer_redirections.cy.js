@@ -1,8 +1,7 @@
 /*
 Home Page TS_1: Home Page:-
 
-TC_1: Verify header navigation links redirects to the right page and check the background for active tab
-TC_3: Verify hamburger icon functions as expected and check for navigation links redirections
+TC_2: Verify footer navigation links redirects to the right page 
 */
 
 import homePage from "../../../pageobject/HomePage";
@@ -15,12 +14,12 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Verification of Home Page TS 1 Home Page", () => {
+describe("Home - Footer Navigation Link Redirection & Active Tab Styling", () => {
   viewports.forEach(({ device, viewport }) => {
-    it(`Verify header navigation links redirect to the right page and check the background for active tab on ${device}`, () => {
+    it(`Verify footer navigation links redirect to the right page on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      homePage.verifyHeaderJumplinkRedirections(device);
+      homePage.verifyFooterJumplinkRedirections();
     });
   });
 });

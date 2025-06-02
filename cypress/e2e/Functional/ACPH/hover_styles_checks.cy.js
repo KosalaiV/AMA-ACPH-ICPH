@@ -1,9 +1,3 @@
-/*
-Home Page TS_1: Home Page:-
-
-TC_4: Check the status codes of all anchor tags (API call)
-*/
-
 import homePage from "../../../pageobject/HomePage";
 
 describe("Home - Navigation Hover Styles", () => {

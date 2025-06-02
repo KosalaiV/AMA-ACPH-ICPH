@@ -1,10 +1,3 @@
-/*
-About Page TS_30: About Us Page:-
-
-TC_63: Verify the page holds necessary content in it
-TC_64: Verify the container has contact CTA linked to it is accessible
-*/
-
 import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with
@@ -15,7 +8,7 @@ const viewports = [
   { device: "ipad-mini", viewport: "ipad-mini" }, // Tablet (iPad Mini)
 ];
 
-describe("Verification of Cards Block About Us Page", () => {
+describe("Home - Verification of Cards Block", () => {
   viewports.forEach(({ device, viewport }) => {
     it(`Verify the page holds necessary content in it on ${device}`, () => {
       // Set the viewport for each test case

@@ -1,9 +1,3 @@
-/*
-Home Page TS_35: Copyright:-
-
-TC_72: Verify the copyright is visible and check the current year
-*/
-
 import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with

@@ -1,10 +1,3 @@
-/*
-Home Page TS_1: Home Page:-
-
-TC_1: Verify header navigation links redirects to the right page and check the background for active tab
-TC_3: Verify hamburger icon functions as expected and check for navigation links redirections
-*/
-
 import homePage from "../../../pageobject/HomePage";
 
 // Viewports to test with

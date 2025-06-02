@@ -1,9 +1,3 @@
-/*
-Contact Page TS_32: FAQ Block:-
-
-TC_68: Ensure the default position of accordions is collapsed
-*/
-
 import faqPage from "../../../pageobject/FAQPage";
 
 // Viewports to test with

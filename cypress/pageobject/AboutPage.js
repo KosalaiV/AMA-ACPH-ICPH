@@ -1,7 +1,6 @@
 class AboutPage {
   // Locators
 
-  //TS_30: About Us Page
   getHeaderShare() {
     return cy.get("header #block-vdl-sharestaticlinkblock");
   }
@@ -10,31 +9,7 @@ class AboutPage {
     return cy.get("header li>a[href='/about-icph']");
   }
 
-  getHeaderNavigationLink() {
-    return cy.get("header #block-vdl-main-menu a");
-  }
-
-  getFooterCopyright() {
-    return cy.get("footer #block-vdl-copyrightblock");
-  }
-
-  getFooterDisclaimer() {
-    return cy.get("footer #block-vdl-disclaimer");
-  }
-
-  getFooterDevicesLink() {
-    return cy.get("#block-vdl-devices a");
-  }
-
-  getFooterAboutLink() {
-    return cy.get("#block-vdl-footer a");
-  }
-
-  getBreadcrumbs() {
-    return cy.get("#block-vdl-breadcrumbs");
-  }
-
-  getCardsHeader() {
+    getCardsHeader() {
     return cy.get(".cards-block-header");
   }
 
@@ -50,14 +25,12 @@ class AboutPage {
     return cy.get(".menu-toggle");
   }
 
-  //TS_29: Hero Banner
   getHeroSection() {
     return cy.get(".hero-banner");
   }
 
   // Actions
 
-  //TS_29: Hero Banner
   verifyHeroBanner(device) {
     // Visit home page
     cy.visitWithAuth("/");
@@ -142,7 +115,7 @@ class AboutPage {
                   .contains("Read More", { matchCase: false });
 
                 // Step 3: Click Read More
-                cy.get("@readMoreBtn").scrollIntoView().click();
+                cy.get("@readMoreBtn").scrollIntoView().click({ force: true });
 
                 // Step 4: Validate the button text has now changed to "Read Less"
                 cy.get("@readMoreBtn")
@@ -177,7 +150,9 @@ class AboutPage {
                     cy.log(`🔄 Clicking Read Less to collapse content`);
 
                     // Step 6: Click Read Less to collapse
-                    cy.get("@readMoreBtn").scrollIntoView().click();
+                    cy.get("@readMoreBtn")
+                      .scrollIntoView()
+                      .click({ force: true });
 
                     // Step 7: Validate button text changed back to "Read More"
                     cy.get("@readMoreBtn")
@@ -234,98 +209,6 @@ class AboutPage {
     });
   }
 
-  //   verifyReadMoreFunction(endpoint,device) {
-  //   const charLimit = device === "macbook-16" ? 400 : 250;
-
-  //   cy.visitWithAuth(endpoint);
-
-  //   cy.document().then((doc) => {
-  //     const allBlocks = Array.from(
-  //       doc.querySelectorAll(".block-body-text-wrapper")
-  //     );
-
-  //     allBlocks.forEach((block, index) => {
-  //       const hasReadMore = block.querySelector(
-  //         'button.read-more-btn[style="display: inline-block;"]'
-  //       );
-
-  //       cy.wrap(block).within(() => {
-  //         cy.get(".ama-content-wrapper").as("contentWrapper");
-
-  //         cy.get("@contentWrapper")
-  //           .invoke("text")
-  //           .then((collapsedTextRaw) => {
-  //             const collapsedText = collapsedTextRaw.trim();
-  //             const charCount = collapsedText.length;
-
-  //             cy.log(
-  //               `📄 Block ${
-  //                 index + 1
-  //               } collapsed content length: ${charCount} chars`
-  //             );
-
-  //             if (hasReadMore) {
-  //               cy.log(`🔍 Block ${index + 1}: Has Read More button`);
-
-  //               // Step 1: Verify collapsed text exceeds threshold
-  //               expect(
-  //                 charCount,
-  //                 `Collapsed text should exceed ${charLimit} chars`
-  //               ).to.be.greaterThan(charLimit);
-
-  //               cy.get("button.read-more-btn").as("readMoreBtn").scrollIntoView().click();
-
-  //               // Step 2: Get expanded text and validate it's longer
-  //               cy.get("@contentWrapper")
-  //                 .invoke("text")
-  //                 .then((expandedTextRaw) => {
-  //                   const expandedText = expandedTextRaw.trim();
-  //                   const expandedCharCount = expandedText.length;
-
-  //                   cy.log(
-  //                     `📄 Block ${
-  //                       index + 1
-  //                     } expanded content length: ${expandedCharCount} chars`
-  //                   );
-
-  //                   expect(
-  //                     expandedCharCount,
-  //                     "Expanded text should be longer than collapsed"
-  //                   ).to.be.greaterThan(charCount);
-
-  //                   expect(
-  //                     expandedText.startsWith(
-  //                       collapsedText.replace(/\.\.\.$/, "")
-  //                     ),
-  //                     "Expanded content should begin with collapsed content"
-  //                   ).to.be.true;
-
-  //                   cy.log(
-  //                     `✅ Block ${
-  //                       index + 1
-  //                     } passed Read More character validation.`
-  //                   );
-  //                 });
-  //             } else {
-  //               cy.log(`ℹ️ Block ${index + 1}: No Read More button`);
-
-  //               // ✅ New strict check: length must be < threshold
-  //               expect(
-  //                 charCount,
-  //                 `Content should be strictly less than ${charLimit} chars when no Read More button is present`
-  //               ).to.be.lessThan(charLimit);
-
-  //               cy.log(
-  //                 `✅ Block ${index + 1} correctly rendered without Read More.`
-  //               );
-  //             }
-  //           });
-  //       });
-  //     });
-  //   });
-  // }
-
-  //TS_30: About Us Page
   verifyNecessaryContent(device) {
     // Visit home page
     cy.visitWithAuth("/");

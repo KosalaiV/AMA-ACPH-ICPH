@@ -4,7 +4,7 @@ const username = Cypress.env("username");
 const password = Cypress.env("password");
 
 // Helper to determine if basic auth is needed
-const shouldUseAuth = () => Cypress.env("environment") !== "prod";
+const shouldUseAuth = () => Cypress.env("environment");
 
 Cypress.Commands.add("visitWithAuth", (url) => {
   const authOptions = {
