@@ -14,7 +14,7 @@ describe("Exhibitors & Sponsors - Show More and Read More Functionalities", () =
       // Set the viewport for each test case
       cy.viewport(viewport);
       exhibitorsSponsorsPage.verifyShowMoreReadMoreCombinedFunctionality(
-        "/exhibitors-listing-page",
+        "/conference-on-physician-health-information/exhibitors-and-sponsors",
         device
       );
     });

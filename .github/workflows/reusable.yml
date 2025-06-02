@@ -241,12 +241,12 @@
 #           path: ${{ inputs.working-directory }}/split-results
 #       - name: Display structure of downloaded files
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           ls -R split-results
 
 #       - name: Prepare folder
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           mkdir mochawesome
 #           mkdir -p mochawesome/screenshots
 #           mkdir -p mochawesome/videos
@@ -255,26 +255,26 @@
 
 #       - name: Copy all assets and JSON reports
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           cp -r split-results/cypress-split-results-*/screenshots/* mochawesome/screenshots || true
 #           cp -r split-results/cypress-split-results-*/videos/* mochawesome/videos || true
 #           cp -r split-results/cypress-split-results-*/results/* mochawesome/results || true
 
 #       - name: Show coped files
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           ls -lR mochawesome
 
 #       - name: Merge Mochawesome JSON reports
 #         # assuming the merge tool is installed
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           npx mochawesome-merge mochawesome/results/*.json -o mochawesome/html-reports/merged.json
 
 #       - name: Generate Mochawesome HTML report
 #         # assuming the merge tool is installed
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           npx marge mochawesome/html-reports/merged.json \
 #             --charts true --showHooks always \
 #             --reportDir mochawesome/html-reports \
@@ -484,12 +484,12 @@
 
 #       - name: Display downloaded structure
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           ls -R split-results
 
 #       - name: Prepare report folders
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           mkdir -p mochawesome/screenshots
 #           mkdir -p mochawesome/videos
 #           mkdir -p mochawesome/results
@@ -497,19 +497,19 @@
 
 #       - name: Copy test assets
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           cp -r split-results/cypress-split-results-*/screenshots/* mochawesome/screenshots || true
 #           cp -r split-results/cypress-split-results-*/videos/* mochawesome/videos || true
 #           cp -r split-results/cypress-split-results-*/results/* mochawesome/results || true
 
 #       - name: Merge Mochawesome JSON
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           npx mochawesome-merge mochawesome/results/*.json -o mochawesome/html-reports/merged.json
 
 #       - name: Generate HTML report
 #         run: |
-#           cd ${{ inputs.working-directory }}
+#
 #           npx marge mochawesome/html-reports/merged.json \
 #             --charts true --showHooks always \
 #             --reportDir mochawesome/html-reports \
@@ -764,12 +764,12 @@ jobs:
           path: ${{ inputs.working-directory }}/split-results
       - name: Display structure of downloaded files
         run: |
-          cd ${{ inputs.working-directory }}
+
           ls -R split-results
 
       - name: Prepare folder
         run: |
-          cd ${{ inputs.working-directory }}
+
           mkdir mochawesome
           mkdir -p mochawesome/screenshots
           mkdir -p mochawesome/videos
@@ -778,26 +778,26 @@ jobs:
 
       - name: Copy all assets and JSON reports
         run: |
-          cd ${{ inputs.working-directory }}
+
           cp -r split-results/cypress-split-results-*/screenshots/* mochawesome/screenshots || true
           cp -r split-results/cypress-split-results-*/videos/* mochawesome/videos || true
           cp -r split-results/cypress-split-results-*/results/* mochawesome/results || true
 
       - name: Show coped files
         run: |
-          cd ${{ inputs.working-directory }}
+
           ls -lR mochawesome
 
       - name: Merge Mochawesome JSON reports
         # assuming the merge tool is installed
         run: |
-          cd ${{ inputs.working-directory }}
+
           npx mochawesome-merge mochawesome/results/*.json -o mochawesome/html-reports/merged.json
 
       - name: Generate Mochawesome HTML report
         # assuming the merge tool is installed
         run: |
-          cd ${{ inputs.working-directory }}
+
           npx marge mochawesome/html-reports/merged.json \
             --charts true --showHooks always \
             --reportDir mochawesome/html-reports \
