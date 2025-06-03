@@ -1,4 +1,4 @@
-# AMA Multisites Automated Testing 🚀
+# AMA Multisites ACPH ICPH Automated Testing 🚀
 
 This project aims to facilitate automated functional and visual checklists in the CI pipeline, reducing testing time and preventing production deployment issues.
 

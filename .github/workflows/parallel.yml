@@ -106,6 +106,7 @@ jobs:
     uses: ./.github/workflows/reusable.yml
     with:
       n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 10 }}
+      working-directory: "test-automation"
       marge: true
       command: ${{ needs.set-params.outputs.command }}
       spec: ${{ needs.set-params.outputs.spec }}
