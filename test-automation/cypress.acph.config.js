@@ -12,7 +12,7 @@ const environments = {
 
 module.exports = defineConfig({
   pageLoadTimeout: 500000,
-  video: false,
+  video: true,
   retries: {
     experimentalStrategy: "detect-flake-and-pass-on-threshold",
     experimentalOptions: {

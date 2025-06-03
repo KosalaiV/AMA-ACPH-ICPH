@@ -6,10 +6,30 @@ const password = Cypress.env("password");
 // Helper to determine if basic auth is needed
 const shouldUseAuth = () => Cypress.env("environment");
 
+// Cypress.Commands.add("visitWithAuth", (url) => {
+//   const authOptions = {
+//     failOnStatusCode: false, // ✅ Always include this
+//   };
+
+//   if (shouldUseAuth()) {
+//     authOptions.auth = {
+//       username,
+//       password,
+//     };
+//   }
+
+//   cy.visit(url, authOptions);
+// });
+
 Cypress.Commands.add("visitWithAuth", (url) => {
-  const authOptions = {
-    failOnStatusCode: false, // ✅ Always include this
-  };
+  const username = Cypress.env("username");
+  const password = Cypress.env("password");
+
+  function shouldUseAuth() {
+    return !!username && !!password;
+  }
+
+  const authOptions = {};
 
   if (shouldUseAuth()) {
     authOptions.auth = {
@@ -20,6 +40,8 @@ Cypress.Commands.add("visitWithAuth", (url) => {
 
   cy.visit(url, authOptions);
 });
+
+
 
 
 
