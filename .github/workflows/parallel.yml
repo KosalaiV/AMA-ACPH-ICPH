@@ -72,10 +72,12 @@ on:
         required: true
       browser-type:
         type: choice
+        description: "Not required for Visual Testing"
         options: [chrome, firefox, edge]
         required: true
       env-type:
         type: choice
+        description: "Not required for Visual Testing"
         options: [prod, stage, dev]
         required: true
 
