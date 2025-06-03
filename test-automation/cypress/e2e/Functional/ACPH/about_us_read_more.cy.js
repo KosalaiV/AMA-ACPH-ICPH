@@ -13,7 +13,7 @@ describe("About Us - Read More and Read Less Functionality", () => {
     it(`Ensure the read more and read less works as expected in ${device}`, () => {
         // Set the viewport for each test case
       cy.viewport(viewport);
-      aboutPage.verifyReadMoreFunction("/about-acph",device);
+      aboutPage.verifyReadMoreFunction("/about-cph",device);
   });
 });
 });

@@ -49,6 +49,7 @@ module.exports = defineConfig({
       const env = config.env.environment || "stage"; // Default to 'stage' if no environment is provided
       config.baseUrl = environments[env]; // Dynamically set the base URL based on the environment
 
+      console.log("Baseurl: " + config.baseUrl);
       return config;
     },
   },
