@@ -19,8 +19,8 @@ const pagesToTest = [
     path: "/conference-on-physician-health-information/travel-details",
   },
   {
-    name: "2025 Conference Info",
-    path: "/conference-on-physician-health-information/american-conference-on-physician-health-2025",
+    name: "Agenda at a Glance",
+    path: "/conference-on-physician-health-information/international-conference-on-physician-health",
   },
   {
     name: "Conference Materials",
@@ -32,7 +32,7 @@ const pagesToTest = [
   },
   {
     name: "Speakers",
-    path: "/conference-on-physician-health-information/conference-speakers",
+    path: "/conference-speakers",
   },
   {
     name: "Exhibitors & Sponsors",

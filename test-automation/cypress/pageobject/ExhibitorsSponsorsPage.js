@@ -167,9 +167,6 @@ class ExhibitorsSponsorsPage {
     // Visit home page
     cy.visitWithAuth(endpoint);
 
-    // // Click allow button if visible
-    // this.getAllowButton().should("be.visible").click({ force: true });
-
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
       this.getHamburgerIconButton()
@@ -271,8 +268,6 @@ class ExhibitorsSponsorsPage {
                 .should("contain.text", "Show More")
                 .should("be.visible")
                 .click({ force: true });
-
-              cy.wait(5000);
 
               // Wait for additional content to load (adjust timeout if needed)
               cy.then(() => {

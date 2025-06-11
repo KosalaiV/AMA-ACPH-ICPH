@@ -472,8 +472,6 @@ class HomePage {
     // Visit home page
     cy.visitWithAuth("/");
 
-    // Click allow button if visible
-
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
       this.getHamburgerIconButton()
@@ -549,8 +547,6 @@ class HomePage {
   validateCopyright() {
     // Visit home page
     cy.visitWithAuth("/");
-
-    // Click allow button if visible
 
     // Check copyright
     this.getCopyright().scrollIntoView().should("be.visible");
