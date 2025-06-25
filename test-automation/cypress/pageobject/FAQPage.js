@@ -20,6 +20,7 @@ class FAQPage {
 
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -27,6 +28,7 @@ class FAQPage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
 
     cy.document().then((doc) => {
@@ -52,6 +54,7 @@ class FAQPage {
 
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -59,8 +62,9 @@ class FAQPage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
-    
+
     this.getFAQSection().find(".faq-group-category-title").should("be.visible");
     //Get the accordions length
     this.getFAQSection()
@@ -74,6 +78,7 @@ class FAQPage {
       .should("be.visible")
       .each((accordion) => {
         cy.wrap(accordion).scrollIntoView().click({ force: true });
+        cy.wait(1000);
         cy.wait(1000);
         this.getFAQSection()
           .find(".accordion-panel:not([hidden]) p")
@@ -100,6 +105,7 @@ class FAQPage {
       .should("be.visible")
       .each((accordion) => {
         cy.wrap(accordion).scrollIntoView().click({ force: true });
+        cy.wait(1000);
         cy.wait(1000);
       });
 

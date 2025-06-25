@@ -9,7 +9,7 @@ class AboutPage {
     return cy.get("header li>a[href='/about-icph']");
   }
 
-    getCardsHeader() {
+  getCardsHeader() {
     return cy.get(".cards-block-header");
   }
 
@@ -37,6 +37,7 @@ class AboutPage {
 
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -44,10 +45,12 @@ class AboutPage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
 
     // Click about link
     this.getAboutLink().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // Ensure the hero section is visible
     this.getHeroSection().should("be.visible");
@@ -116,6 +119,7 @@ class AboutPage {
 
                 // Step 3: Click Read More
                 cy.get("@readMoreBtn").scrollIntoView().click({ force: true });
+                cy.wait(1000);
 
                 // Step 4: Validate the button text has now changed to "Read Less"
                 cy.get("@readMoreBtn")
@@ -153,6 +157,7 @@ class AboutPage {
                     cy.get("@readMoreBtn")
                       .scrollIntoView()
                       .click({ force: true });
+                    cy.wait(1000);
 
                     // Step 7: Validate button text changed back to "Read More"
                     cy.get("@readMoreBtn")
@@ -215,6 +220,7 @@ class AboutPage {
 
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -222,9 +228,11 @@ class AboutPage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
     // Click about link
     this.getAboutICPHLink().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     this.getCardsBlock().scrollIntoView();
 

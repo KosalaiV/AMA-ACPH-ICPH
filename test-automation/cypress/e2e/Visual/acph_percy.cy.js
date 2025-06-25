@@ -26,6 +26,7 @@ describe("Visual Testing with Percy", () => {
 
       // Click allow button if visible
       // cy.get(".allowAll").should("be.visible").click({ force: true });
+      cy.wait(1000);
 
       // After page load, ensure the custom property has been removed
       cy.window().should("not.have.prop", "beforeReload");

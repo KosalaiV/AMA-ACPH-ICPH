@@ -73,6 +73,7 @@ class HomePage {
 
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -80,6 +81,7 @@ class HomePage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
 
     // Ensure the header links are visible and get their count
@@ -115,6 +117,7 @@ class HomePage {
                         .should("be.enabled")
                         .should("be.visible")
                         .click({ force: true });
+                      cy.wait(1000);
                     }
 
                     //Assert bg color for active header tab
@@ -130,6 +133,7 @@ class HomePage {
                   .should("be.enabled")
                   .should("be.visible")
                   .click({ force: true });
+                cy.wait(1000);
               }
             });
         }
@@ -173,6 +177,7 @@ class HomePage {
         cy.get(`.footer-bottom-wrapper a[href="${href}"]`)
           .invoke("removeAttr", "target")
           .click({ force: true });
+        cy.wait(1000);
 
         cy.origin(hrefOrigin, { args: expectedSegment }, (segment) => {
           cy.location("pathname", { timeout: 10000 }).should(
@@ -264,6 +269,7 @@ class HomePage {
 
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // Ensure the hero section is visible
     this.getHeroSection().should("exist");
@@ -296,6 +302,7 @@ class HomePage {
             for (let i = 0; i < totalSlides; i++) {
               // Click the dot to navigate to the respective slide
               this.getHeroSectionCarousel().eq(i).click({ force: true });
+              cy.wait(1000);
 
               cy.wait(2000);
 
@@ -407,6 +414,7 @@ class HomePage {
 
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -414,6 +422,7 @@ class HomePage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
     // Click about link
 
@@ -478,6 +487,7 @@ class HomePage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
 
     // Ensure the header links are visible and get their count
@@ -518,6 +528,7 @@ class HomePage {
                           .then((href) => {
                             // Click on the breadcrumb link and verify the URL
                             cy.wrap(link).click({ force: true });
+                            cy.wait(1000);
 
                             // Ensure the URL matches the breadcrumb link's href attribute
                             cy.url().should("include", href);
@@ -530,11 +541,13 @@ class HomePage {
                         .should("be.enabled")
                         .should("be.visible")
                         .click({ force: true });
+                      cy.wait(1000);
 
                       this.getHamburgerIconCrossButton()
                         .should("be.enabled")
                         .should("be.visible")
                         .click({ force: true });
+                      cy.wait(1000);
                     }
                   });
               }

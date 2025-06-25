@@ -99,6 +99,7 @@ class ConferencePage {
 
                 // Step 3: Click Read More
                 cy.get("@readMoreBtn").scrollIntoView().click({ force: true });
+                cy.wait(1000);
 
                 // Step 4: Validate the button text has now changed to "Read Less"
                 cy.get("@readMoreBtn")
@@ -136,6 +137,7 @@ class ConferencePage {
                     cy.get("@readMoreBtn")
                       .scrollIntoView()
                       .click({ force: true });
+                    cy.wait(1000);
 
                     // Step 7: Validate button text changed back to "Read More"
                     cy.get("@readMoreBtn")
@@ -201,6 +203,7 @@ class ConferencePage {
       if (element) {
         this.getTabs().each(($tab, index) => {
           cy.wrap($tab).click({ force: true });
+          cy.wait(1000);
 
           // Validate active tab and its background color
           cy.wrap($tab)
@@ -228,6 +231,7 @@ class ConferencePage {
       if (element) {
         this.getTabs().each(($tab, index) => {
           cy.wrap($tab).click({ force: true });
+          cy.wait(1000);
 
           // Validate active tab and its background color
           cy.wrap($tab)
@@ -245,6 +249,7 @@ class ConferencePage {
             .should("be.visible")
             .each((accordion) => {
               cy.wrap(accordion).scrollIntoView().click({ force: true });
+              cy.wait(1000);
               cy.wait(1000);
 
               this.getActiveAccordionContentParagraph()
@@ -270,6 +275,7 @@ class ConferencePage {
             .should("be.visible")
             .each((accordion) => {
               cy.wrap(accordion).scrollIntoView().click({ force: true });
+              cy.wait(1000);
               cy.wait(1000);
             });
 

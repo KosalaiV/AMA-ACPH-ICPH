@@ -70,6 +70,7 @@ class ExhibitorsSponsorsPage {
 
                 // Step 3: Click Read More
                 cy.get("@readMoreBtn").scrollIntoView().click({ force: true });
+                cy.wait(1000);
 
                 // Step 4: Validate the button text has now changed to "Read Less"
                 cy.get("@readMoreBtn")
@@ -107,6 +108,7 @@ class ExhibitorsSponsorsPage {
                     cy.get("@readMoreBtn")
                       .scrollIntoView()
                       .click({ force: true });
+                    cy.wait(1000);
 
                     // Step 7: Validate button text changed back to "Read More"
                     cy.get("@readMoreBtn")
@@ -173,6 +175,7 @@ class ExhibitorsSponsorsPage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
 
     cy.document().then((doc) => {
@@ -194,6 +197,7 @@ class ExhibitorsSponsorsPage {
                 .should("contain.text", "Show More")
                 .should("be.visible")
                 .click({ force: true });
+              cy.wait(1000);
 
               // Wait for additional content to load (adjust timeout if needed)
               this.getSponserExhibitorBlocks()
@@ -239,6 +243,7 @@ class ExhibitorsSponsorsPage {
 
     // // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
+    cy.wait(1000);
 
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
@@ -246,6 +251,7 @@ class ExhibitorsSponsorsPage {
         .should("be.enabled")
         .should("be.visible")
         .click({ force: true });
+      cy.wait(1000);
     }
 
     cy.document().then((doc) => {
@@ -268,6 +274,7 @@ class ExhibitorsSponsorsPage {
                 .should("contain.text", "Show More")
                 .should("be.visible")
                 .click({ force: true });
+              cy.wait(1000);
 
               // Wait for additional content to load (adjust timeout if needed)
               cy.then(() => {
@@ -352,6 +359,7 @@ class ExhibitorsSponsorsPage {
                         cy.get("@readMoreBtn")
                           .scrollIntoView()
                           .click({ force: true });
+                        cy.wait(1000);
 
                         // Step 4: Validate the button text has now changed to "Read Less"
                         cy.get("@readMoreBtn")
@@ -389,6 +397,7 @@ class ExhibitorsSponsorsPage {
                             cy.get("@readMoreBtn")
                               .scrollIntoView()
                               .click({ force: true });
+                            cy.wait(1000);
 
                             // Step 7: Validate button text changed back to "Read More"
                             cy.get("@readMoreBtn")
