@@ -11,9 +11,13 @@ const viewports = [
 describe("Past Cpnference - Read More and Read Less Functionality", () => {
   viewports.forEach(({ device, viewport }) => {
     it(`Ensure the read more and read less works as expected in ${device}`, () => {
-        // Set the viewport for each test case
+      // Set the viewport for each test case
       cy.viewport(viewport);
-      conferencePage.verifyReadMoreFunction("/conference-on-physician-health-information/past-conference-resources",device);
+      cy.wait(2000);
+      conferencePage.verifyReadMoreFunction(
+        "/conference-on-physician-health-information/past-conference-resources",
+        device
+      );
+    });
   });
-});
 });

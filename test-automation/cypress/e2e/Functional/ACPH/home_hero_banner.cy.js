@@ -13,6 +13,7 @@ describe("Home - Hero Section Carousel Functionality", () => {
     it(`Verify carousel functions as expected and has relevant content in it on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
+      cy.wait(2000);
       homePage.verifyHeroSectionCarousel();
     });
   });

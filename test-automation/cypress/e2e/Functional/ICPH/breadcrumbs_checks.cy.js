@@ -13,6 +13,7 @@ describe("Home - Verification of Breadcrumb Function", () => {
     it(`Verify breadcrumb functions as expected on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
+      cy.wait(2000);
       homePage.validateBreadcrumbLinks(device);
     });
   });

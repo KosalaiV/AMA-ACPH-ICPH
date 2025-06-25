@@ -13,6 +13,7 @@ describe("Home - Header Navigation Link Redirection & Active Tab Styling", () =>
     it(`Verify header navigation links redirect to the right page and check the background for active tab on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
+      cy.wait(2000);
       homePage.verifyHeaderJumplinkRedirections(device);
     });
   });

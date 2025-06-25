@@ -11,6 +11,7 @@ describe("Home - Verification of Cards Block Row Count Across Devices", () => {
   viewports.forEach(({ device, viewport, expectedCardsPerRow }) => {
     it(`Should display ${expectedCardsPerRow} card(s) per row on ${device}`, () => {
       cy.viewport(viewport);
+      cy.wait(2000);
       // Visit home page
       homePage.verifyCardsRowCount(device, expectedCardsPerRow);
     });

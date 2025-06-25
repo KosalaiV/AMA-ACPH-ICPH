@@ -12,7 +12,11 @@ describe("Agenda At A Glance - Tabbed Interface and Accordion Validation", () =>
   viewports.forEach(({ device, viewport }) => {
     it(`Should validate tab background color and accordions inside on ${device}`, () => {
       cy.viewport(viewport);
-      conferencePage.verifyTabbedAccordion("/conference-on-physician-health-information/american-conference-on-physician-health-2025","rgb(193, 216, 47)");
+      cy.wait(2000);
+      conferencePage.verifyTabbedAccordion(
+        "/conference-on-physician-health-information/american-conference-on-physician-health-2025",
+        "rgb(193, 216, 47)"
+      );
     });
   });
 });

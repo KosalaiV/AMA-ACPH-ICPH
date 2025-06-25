@@ -13,6 +13,7 @@ describe("Home - Verification of Cards Block", () => {
     it(`Verify the page holds necessary content in it on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
+      cy.wait(2000);
       homePage.verifyNecessaryContent(device);
     });
   });

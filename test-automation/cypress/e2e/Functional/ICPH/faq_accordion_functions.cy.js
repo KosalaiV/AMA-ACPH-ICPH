@@ -13,6 +13,7 @@ describe("FAQ - Accordion Expand/Collapse Functionality", () => {
     it(`Verify accordions expand and collapse as expected on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
+      cy.wait(2000);
       faqPage.verifyAccordionFunctions(device);
     });
   });

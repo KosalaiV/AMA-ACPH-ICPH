@@ -13,6 +13,7 @@ describe("Home - Footer Navigation Link Redirection & Active Tab Styling", () =>
     it(`Verify footer navigation links redirect to the right page on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
+      cy.wait(2000);
       homePage.verifyFooterJumplinkRedirections();
     });
   });

@@ -13,6 +13,7 @@ describe("Exhibitors & Sponsors - Show More Functionality", () => {
     it(`Ensure the show more works as expected in ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
+      cy.wait(2000);
       exhibitorsSponsorsPage.verifyShowMoreFunctionality(
         "/conference-on-physician-health-information/exhibitors-and-sponsors",
         device
