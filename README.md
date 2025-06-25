@@ -1,55 +1,71 @@
 # AMA Multisites ACPH ICPH Automated Testing 🚀
 
-This project aims to facilitate automated functional and visual checklists in the CI pipeline, reducing testing time and preventing production deployment issues.
+---
 
-## File Structure 📂
+### Overview
+This help document guides users on how to manually trigger **Functional** and **Visual** Cypress tests for the ACPH and ICPH websites via GitHub Actions. It walks through the exact steps in the GitHub UI for selecting inputs and launching the tests.
 
+---
+
+### Project Structure: AMA Multisites ACPH ICPH Automated Testing 🚀
+
+This project enables automated functional and visual testing within the CI pipeline, aiming to minimize release risks and manual test time.
+
+#### **File Structure 📂**
 - **Config file**: `cypress.config.js`
 - **Dependency file**: `package.json`
-- **Test files**: `(.cypress/e2e/)`
-- **Page object files**: `(.cypress/pageobject)`
-- **Support files**: `(.cypress/support)`
-- **Test data files**: `(.cypress/fixtures)`
+- **Test files**: `cypress/e2e/`
+- **Page object files**: `cypress/pageobject/`
+- **Support files**: `cypress/support/`
+- **Test data files**: `cypress/fixtures/`
 
-## CI Pipeline Trigger ⏳
+---
 
-We've set up a manual trigger known as `workflow_dispatch` in YAML terms.
+### Step-by-Step Instructions
 
-1. Go to the GitHub `Actions` tab.
-2. Click on `test-automation` under the **All workflows** section (_located on the left side_).
-3. You will see `This workflow has a workflow_dispatch event trigger.`
-4. Click the `Run workflow` dropdown.
-5. Select the **branch** `test-automation`.
-6. Choose one of the **Select the testing type:** from the dropdown list:
-   - <sub>`Functional`</sub>
-   - <sub>`Visual`</sub>
-7. Choose one of the **Select the browser:** from the dropdown list:
+#### 1. **Navigate to the Actions Tab**
+- Go to your repository on GitHub.
+- Click on the **"Actions"** tab near the top navigation bar.
 
-   - <sub>`chrome`</sub>
-   - <sub>`firefox`</sub>
-   - <sub>`edge`</sub>
+#### 2. **Select the `test-automation` Workflow**
+- In the left sidebar, click on **`test-automation`** under **All workflows**.
+- You will see the message: *This workflow has a workflow_dispatch event trigger.*
 
-   **🚨 Note**: _*No need to select browsers incase of `Visual` Testing [Percy configured]*_
+#### 3. **Click "Run Workflow"**
+- On the right side, click the **"Run workflow"** dropdown.
+- Select the desired **branch** (typically `test-automation`).
 
-8. Choose one of the **Select the environment:** from the dropdown list:
+#### 4. **Fill in the Required Inputs**
+- **Website**: Choose `ACPH` or `ICPH`.
+- **Testing Type**: Choose `Functional` or `Visual`.
+- **Browser Type** *(only required for Functional)*: `chrome`, `firefox`, or `edge`.
+- **Env Type** *(only required for Functional)*: `prod`, `stage`, or `dev`.
 
-   - <sub>`prod`</sub>
-   - <sub>`stage`</sub>
-   - <sub>`dev`</sub>
+> 🚨 **Note:** For **Visual Testing**, `browser` and `environment` inputs must still be filled due to form constraints, but they are ignored during execution.
 
-   **🚨 Note**: _*No need to select environment incase of `Visual` Testing [Defaults to prod]*_
+#### 5. **Click the Green "Run workflow" Button**
+- Once all fields are selected, click **Run workflow**.
+- The job starts and appears in the list of recent runs.
 
-9. Finally, click `Run workflow`.
+---
 
-## Reporting 📊
+### Reporting 📊
 
-An automatic trigger will occur after running scripts in the pipeline. To learn about pipeline configurations, refer to the GitHub workflow YAML file.
+#### 1. **GitHub Actions Summary**
+- Go to the latest run under `Actions` tab.
+- View the **Summary** to check test pass/fail counts.
 
-1. **GitHub Actions Summary Report:**
+#### 2. **HTML Report**
+- From the pipeline run artifacts, download the `merged-mochawesome-report.zip`.
+- Extract and open `html-reports/index.html`.
+- To share, zip the `html-reports` directory and send.
 
-   - Check the `Summary` section in the latest GitHub Actions execution, which highlights the executed tests with pass/fail statistics.
+---
 
-2. **HTML Report:**
-   - Download the `merged-mochawesome-report` from the executed pipeline in GitHub Actions. Check for `html-reports` directory, inside that open `index.html`. To share the report with client, just compress the `html-reports` directory and share it.
+### Troubleshooting
+- ✅ Ensure all required secrets (`CYPRESS_USERNAME`, `CYPRESS_PASSWORD`, `ACPH_PERCY_TOKEN`, `ICPH_PERCY_TOKEN`) are available.
+- ✅ Make sure spec files are present in the expected folder (`cypress/e2e/Functional/` or `Visual/`).
+
+---
 
 Feel free to customize the script to suit your specific requirements 😎
