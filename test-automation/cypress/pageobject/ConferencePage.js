@@ -55,7 +55,18 @@ class ConferencePage {
     const charLimit = device === "macbook-16" ? 400 : 250;
 
     cy.visitWithAuth(endpoint);
-
+cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     cy.document().then((doc) => {
       const allBlocks = Array.from(
         doc.querySelectorAll(".block-body-text-wrapper")
@@ -196,7 +207,18 @@ class ConferencePage {
 
   verifyTabsContent(endpoint, color) {
     cy.visitWithAuth(endpoint);
-
+cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     cy.document().then((doc) => {
       cy.wait(2000);
       const element = doc.querySelector(".tabs__link");
@@ -224,7 +246,18 @@ class ConferencePage {
 
   verifyTabbedAccordion(endpoint, color) {
     cy.visitWithAuth(endpoint);
-
+cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     cy.document().then((doc) => {
       cy.wait(2000);
       const element = doc.querySelector(".tabs__link");

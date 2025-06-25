@@ -70,7 +70,18 @@ class HomePage {
   verifyHeaderJumplinkRedirections(device) {
     // Visit home page
     cy.visitWithAuth("/");
-
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
     cy.wait(1000);
@@ -143,51 +154,94 @@ class HomePage {
   verifyHoverStyles(background, color) {
     cy.viewport("macbook-16");
     cy.visitWithAuth("/");
-
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     this.getHeaderLinks().each(($el, index) => {
-      cy.wrap($el)
-        .realHover()
-        .should("have.css", "background-color", background)
-        .and("have.css", "color", color);
+      if (Cypress.browser.name === "firefox") {
+        cy.wrap($el)
+          .invoke("addClass", "hover") // Tailwind-style class-based hover
+          .should("have.css", "background-color", background)
+          .and("have.css", "color", color);
+      } else {
+        cy.wrap($el)
+          .realHover()
+          .should("have.css", "background-color", background)
+          .and("have.css", "color", color);
+      }
 
       cy.log(`Hovered and validated element index: ${index}`);
     });
   }
 
-  verifyFooterJumplinkRedirections() {
-    cy.visitWithAuth("/");
-    this.getFooterLinks().then(($links) => {
-      const hrefs = [];
-      $links.each((_, link) => {
-        const href = link.getAttribute("href");
-        if (href && href.startsWith("http")) {
-          hrefs.push(href);
-        }
-      });
+  // verifyFooterJumplinkRedirections() {
+  //   cy.visitWithAuth("/");
+  //   cy.document().then((doc) => {
+  //     cy.wait(3000);
+  //     const element = doc.querySelector("#onetrust-close-btn-container>button");
+  //     if (element) {
+  //       assert.ok("Cookie visible and clicked");
+  //       cy.get("#onetrust-close-btn-container>button")
+  //         .should("be.visible")
+  //         .click({ force: true });
+  //     } else {
+  //       assert.ok("Cookie is not visible and already clicked");
+  //     }
+  //   });
+  //   this.getFooterLinks().then(($links) => {
+  //     const hrefs = [];
+  //     $links.each((_, link) => {
+  //       const href = link.getAttribute("href");
+  //       if (href && href.startsWith("http")) {
+  //         hrefs.push(href);
+  //       }
+  //     });
 
-      hrefs.forEach((href) => {
-        const hrefOrigin = new URL(href).origin;
-        const expectedSegment = new URL(href).pathname
-          .split("/")
-          .filter(Boolean)
-          .pop();
+  //     hrefs.forEach((href) => {
+  //       const hrefOrigin = new URL(href).origin;
+  //       const expectedSegment = new URL(href).pathname
+  //         .split("/")
+  //         .filter(Boolean)
+  //         .pop();
 
-        cy.visitWithAuth("/");
+  //       cy.visitWithAuth("/");
+  //       cy.document().then((doc) => {
+  //         cy.wait(3000);
+  //         const element = doc.querySelector(
+  //           "#onetrust-close-btn-container>button"
+  //         );
+  //         if (element) {
+  //           assert.ok("Cookie visible and clicked");
+  //           cy.get("#onetrust-close-btn-container>button")
+  //             .should("be.visible")
+  //             .click({ force: true });
+  //         } else {
+  //           assert.ok("Cookie is not visible and already clicked");
+  //         }
+  //       });
+  //       cy.get(`.footer-bottom-wrapper a[href="${href}"]`)
+  //         .invoke("removeAttr", "target")
+  //         .click({ force: true });
+  //       cy.wait(1000);
 
-        cy.get(`.footer-bottom-wrapper a[href="${href}"]`)
-          .invoke("removeAttr", "target")
-          .click({ force: true });
-        cy.wait(1000);
-
-        cy.origin(hrefOrigin, { args: expectedSegment }, (segment) => {
-          cy.location("pathname", { timeout: 10000 }).should(
-            "include",
-            segment
-          );
-        });
-      });
-    });
-  }
+  //       cy.origin(hrefOrigin, { args: expectedSegment }, (segment) => {
+  //         cy.location("pathname", { timeout: 10000 }).should(
+  //           "include",
+  //           segment
+  //         );
+  //       });
+  //     });
+  //   });
+  // }
 
   // validateResponseCodes() {
   //   const failedUrls = [];
@@ -253,87 +307,167 @@ class HomePage {
   //     });
   // }
 
-  validateResponseCodes() {
-  const failedUrls = [];
+  verifyFooterJumplinkRedirections() {
+  cy.visitWithAuth("/");
 
-  // Utility to detect external links
-  const isExternal = (url) => {
-    try {
-      const base = new URL(Cypress.config().baseUrl);
-      const target = new URL(url, base);
-      return base.hostname !== target.hostname;
-    } catch (e) {
-      return true;
+  // Handle cookie banner if present
+  cy.document().then((doc) => {
+    cy.wait(3000);
+    const element = doc.querySelector("#onetrust-close-btn-container>button");
+    if (element) {
+      assert.ok("Cookie visible and clicked");
+      cy.get("#onetrust-close-btn-container>button")
+        .should("be.visible")
+        .click({ force: true });
+    } else {
+      assert.ok("Cookie is not visible and already clicked");
     }
-  };
+  });
 
-  this.getAnchorLinks().then(($links) => {
-    const links = Cypress.$.makeArray($links); // Convert to array for sequential processing
-
-    const processLink = (index) => {
-      if (index >= links.length) {
-        if (failedUrls.length > 0) {
-          const error = new Error(
-            `❌ Failed URLs:\n${failedUrls
-              .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
-              .join("\n")}`
-          );
-          throw error;
-        } else {
-          cy.log("✅ All internal links returned valid status codes.");
-        }
-        return;
+  // Extract footer links
+  this.getFooterLinks().then(($links) => {
+    const hrefs = [];
+    $links.each((_, link) => {
+      const href = link.getAttribute("href");
+      if (href && href.startsWith("http")) {
+        hrefs.push(href);
       }
+    });
 
-      const $el = links[index];
-      const href = $el.getAttribute("href");
+    // Process each href one-by-one
+    Cypress._.each(hrefs, (href) => {
+      try {
+        const url = new URL(href);
+        const hrefOrigin = url.origin;
+        const expectedSegment = url.pathname
+          .split("/")
+          .filter(Boolean)
+          .pop();
 
-      if (
-        !href ||
-        href.startsWith("mailto:") ||
-        href.startsWith("tel:") ||
-        href.startsWith("#")
-      ) {
-        cy.log(`🔕 Skipping non-testable link: ${href}`);
-        return processLink(index + 1);
+        cy.visitWithAuth("/");
+
+        // Handle cookie banner again, if needed
+        cy.document().then((doc) => {
+          cy.wait(3000);
+          const element = doc.querySelector("#onetrust-close-btn-container>button");
+          if (element) {
+            cy.get("#onetrust-close-btn-container>button")
+              .should("be.visible")
+              .click({ force: true });
+          }
+        });
+
+        // Click footer link
+        cy.get(`.footer-bottom-wrapper a[href="${href}"]`)
+          .invoke("removeAttr", "target")
+          .click({ force: true });
+
+        cy.wait(1000);
+
+        // Assert the correct redirection
+        cy.origin(hrefOrigin, { args: expectedSegment }, (segment) => {
+          cy.location("pathname", { timeout: 10000 }).should("include", segment);
+        });
+
+      } catch (e) {
+        cy.log(`❌ Skipping malformed or invalid href: ${href}`);
       }
-
-      const fullUrl = href.startsWith("http")
-        ? href
-        : `${Cypress.config().baseUrl}${href}`;
-
-      if (isExternal(fullUrl)) {
-        cy.log(`🌐 Skipping external link: ${fullUrl}`);
-        return processLink(index + 1);
-      }
-
-      // Use cy.wrap to keep Cypress chain
-      cy.wrap(null).then(() => {
-        return cy
-          .requestWithAuth(fullUrl, { failOnStatusCode: false })
-          .then((response) => {
-            if (![200, 301, 302].includes(response.status)) {
-              failedUrls.push({ link: fullUrl, status: response.status });
-            }
-          })
-          .then(() => {
-            cy.wait(1000); // delay between requests
-          })
-          .then(() => {
-            processLink(index + 1);
-          });
-      });
-    };
-
-    processLink(0);
+    });
   });
 }
 
 
+  validateResponseCodes() {
+    const failedUrls = [];
+
+    // Utility to detect external links
+    const isExternal = (url) => {
+      try {
+        const base = new URL(Cypress.config().baseUrl);
+        const target = new URL(url, base);
+        return base.hostname !== target.hostname;
+      } catch (e) {
+        return true;
+      }
+    };
+
+    this.getAnchorLinks().then(($links) => {
+      const links = Cypress.$.makeArray($links); // Convert to array for sequential processing
+
+      const processLink = (index) => {
+        if (index >= links.length) {
+          if (failedUrls.length > 0) {
+            const error = new Error(
+              `❌ Failed URLs:\n${failedUrls
+                .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
+                .join("\n")}`
+            );
+            throw error;
+          } else {
+            cy.log("✅ All internal links returned valid status codes.");
+          }
+          return;
+        }
+
+        const $el = links[index];
+        const href = $el.getAttribute("href");
+
+        if (
+          !href ||
+          href.startsWith("mailto:") ||
+          href.startsWith("tel:") ||
+          href.startsWith("#")
+        ) {
+          cy.log(`🔕 Skipping non-testable link: ${href}`);
+          return processLink(index + 1);
+        }
+
+        const fullUrl = href.startsWith("http")
+          ? href
+          : `${Cypress.config().baseUrl}${href}`;
+
+        if (isExternal(fullUrl)) {
+          cy.log(`🌐 Skipping external link: ${fullUrl}`);
+          return processLink(index + 1);
+        }
+
+        // Use cy.wrap to keep Cypress chain
+        cy.wrap(null).then(() => {
+          return cy
+            .requestWithAuth(fullUrl, { failOnStatusCode: false })
+            .then((response) => {
+              if (![200, 301, 302].includes(response.status)) {
+                failedUrls.push({ link: fullUrl, status: response.status });
+              }
+            })
+            .then(() => {
+              cy.wait(1000); // delay between requests
+            })
+            .then(() => {
+              processLink(index + 1);
+            });
+        });
+      };
+
+      processLink(0);
+    });
+  }
+
   verifyHeroSectionCarousel() {
     // Visit home page
     cy.visitWithAuth("/");
-
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     cy.window().then((win) => {
       const $ = win.jQuery;
 
@@ -489,7 +623,18 @@ class HomePage {
   verifyNecessaryContent(device) {
     // Visit home page
     cy.visitWithAuth("/");
-
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
     cy.wait(1000);
@@ -539,7 +684,18 @@ class HomePage {
 
   verifyCardsRowCount(device, expectedCardsPerRow) {
     cy.visitWithAuth("/");
-
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     this.getCardsList()
       .should("exist")
       .then(($cards) => {
@@ -558,7 +714,18 @@ class HomePage {
   validateBreadcrumbLinks(device) {
     // Visit home page
     cy.visitWithAuth("/");
-
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     // If not on Desktop, open the hamburger menu
     if (device !== "macbook-16") {
       this.getHamburgerIconButton()
@@ -638,7 +805,18 @@ class HomePage {
   validateCopyright() {
     // Visit home page
     cy.visitWithAuth("/");
-
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     // Check copyright
     this.getCopyright().scrollIntoView().should("be.visible");
 

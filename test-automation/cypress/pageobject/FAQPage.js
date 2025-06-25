@@ -17,7 +17,18 @@ class FAQPage {
 
   verifyDefaultAccordionPosition(device) {
     cy.visitWithAuth("/faq");
-
+cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
     cy.wait(1000);
@@ -51,7 +62,18 @@ class FAQPage {
   verifyAccordionFunctions(device) {
     // Visit home page
     cy.visitWithAuth("/faq");
-
+cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
+          .click({ force: true });
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
+      }
+    });
     // Click allow button if visible
     // this.getAllowButton().should("be.visible").click({ force: true });
     cy.wait(1000);
