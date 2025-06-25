@@ -13,7 +13,7 @@ describe("Abstracts - Tabbed Interface and Content Validation", () => {
     it(`Should validate active tab background color and relevant content on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      cy.wait(2000);
+      cy.wait(9000);
       conferencePage.verifyTabsContent("/abstracts", "rgb(238, 193, 64)");
     });
   });

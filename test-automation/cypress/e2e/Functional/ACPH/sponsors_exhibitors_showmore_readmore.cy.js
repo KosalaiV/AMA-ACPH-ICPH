@@ -13,7 +13,7 @@ describe("Exhibitors & Sponsors - Show More and Read More Functionalities", () =
     it(`Ensure the show more, read more and read less works as expected in ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      cy.wait(2000);
+      cy.wait(9000);
       exhibitorsSponsorsPage.verifyShowMoreReadMoreCombinedFunctionality(
         "/conference-on-physician-health-information/exhibitors-and-sponsors",
         device

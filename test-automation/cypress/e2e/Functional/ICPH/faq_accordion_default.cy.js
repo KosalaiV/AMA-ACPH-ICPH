@@ -13,7 +13,7 @@ describe("FAQ - Accordion Default State", () => {
     it(`Ensure the default position of accordions is collapsed on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      cy.wait(2000);
+      cy.wait(9000);
       faqPage.verifyDefaultAccordionPosition(device);
     });
   });

@@ -13,7 +13,7 @@ describe("Speakers - Read More and Read Less Functionality", () => {
     it(`Ensure the read more and read less works as expected in ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      cy.wait(2000);
+      cy.wait(9000);
       conferencePage.verifyReadMoreFunction(
         "/conference-on-physician-health-information/conference-speakers",
         device

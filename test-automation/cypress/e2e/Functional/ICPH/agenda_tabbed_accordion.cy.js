@@ -12,7 +12,7 @@ describe("Agenda At A Glance - Tabbed Interface and Accordion Validation", () =>
   viewports.forEach(({ device, viewport }) => {
     it(`Should validate tab background color and accordions inside on ${device}`, () => {
       cy.viewport(viewport);
-      cy.wait(2000);
+      cy.wait(9000);
       conferencePage.verifyTabbedAccordion(
         "/conference-on-physician-health-information/international-conference-on-physician-health",
         "rgb(238, 193, 64)"

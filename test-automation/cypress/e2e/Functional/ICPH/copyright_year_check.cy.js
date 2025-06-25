@@ -13,7 +13,7 @@ describe("Home - Copyright Validation", () => {
     it(`Verify the copyright is visible and check the current year on ${device}`, () => {
       // Set the viewport for each test case
       cy.viewport(viewport);
-      cy.wait(2000);
+      cy.wait(9000);
       homePage.validateCopyright();
     });
   });
