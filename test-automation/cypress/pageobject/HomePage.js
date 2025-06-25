@@ -230,25 +230,28 @@ class HomePage {
         }
 
         // Make request to internal link
-        cy.requestWithAuth(fullUrl, { failOnStatusCode: false })
-          .wait(2000)
-          .then((response) => {
-            if (![200, 301, 302].includes(response.status)) {
-              failedUrls.push({ link: fullUrl, status: response.status });
-            }
-          });
-      })
-      .then(() => {
-        if (failedUrls.length > 0) {
-          const error = new Error(
-            `❌ Failed URLs:\n${failedUrls
-              .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
-              .join("\n")}`
-          );
-          throw error;
-        } else {
-          cy.log("✅ All internal links returned valid status codes.");
-        }
+      //   cy.requestWithAuth(fullUrl, { failOnStatusCode: false })
+      //     .wait(2000)
+      //     .then((response) => {
+      //       if (![200, 301, 302].includes(response.status)) {
+      //         failedUrls.push({ link: fullUrl, status: response.status });
+      //       }
+      //     });
+      // })
+      // .then(() => {
+      //   if (failedUrls.length > 0) {
+      //     const error = new Error(
+      //       `❌ Failed URLs:\n${failedUrls
+      //         .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
+      //         .join("\n")}`
+      //     );
+      //     throw error;
+      //   } else {
+      //     cy.log("✅ All internal links returned valid status codes.");
+      //   }
+
+      cy.requestWithAuth(fullUrl).its("status").should("eq", 200);
+
       });
   }
 
