@@ -189,57 +189,89 @@ class HomePage {
     });
   }
 
+  // validateResponseCodes() {
+  //   const failedUrls = [];
+
+  //   // Utility: Check if a URL is external
+  //   const isExternal = (url) => {
+  //     try {
+  //       const base = new URL(Cypress.config().baseUrl);
+  //       const target = new URL(url, base); // Resolves relative URLs
+  //       return base.hostname !== target.hostname;
+  //     } catch (e) {
+  //       return true; // Treat invalid URLs as external
+  //     }
+  //   };
+
+  //   this.getAnchorLinks()
+  //     .each(($el) => {
+  //       cy.wait(2000);
+  //       const href = $el.attr("href");
+
+  //       // Skip empty, mailto, tel, and fragment links
+  //       if (
+  //         !href ||
+  //         href.startsWith("mailto:") ||
+  //         href.startsWith("tel:") ||
+  //         href.startsWith("#")
+  //       ) {
+  //         cy.log(`🔕 Skipping non-testable link: ${href}`);
+  //         return;
+  //       }
+
+  //       // Handle relative and absolute URLs
+  //       const fullUrl = href.startsWith("http")
+  //         ? href
+  //         : `${Cypress.config().baseUrl}${href}`;
+
+  //       // Skip external links
+  //       if (isExternal(fullUrl)) {
+  //         cy.log(`🌐 Skipping external link: ${fullUrl}`);
+  //         return;
+  //       }
+
+  //       // Make request to internal link
+  //       cy.requestWithAuth(fullUrl, { failOnStatusCode: false })
+  //         .wait(2000)
+  //         .then((response) => {
+  //           if (![200, 301, 302].includes(response.status)) {
+  //             failedUrls.push({ link: fullUrl, status: response.status });
+  //           }
+  //         });
+  //     })
+  //     .then(() => {
+  //       if (failedUrls.length > 0) {
+  //         const error = new Error(
+  //           `❌ Failed URLs:\n${failedUrls
+  //             .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
+  //             .join("\n")}`
+  //         );
+  //         throw error;
+  //       } else {
+  //         cy.log("✅ All internal links returned valid status codes.");
+  //       }
+  //     });
+  // }
+
   validateResponseCodes() {
-    const failedUrls = [];
+  const failedUrls = [];
 
-    // Utility: Check if a URL is external
-    const isExternal = (url) => {
-      try {
-        const base = new URL(Cypress.config().baseUrl);
-        const target = new URL(url, base); // Resolves relative URLs
-        return base.hostname !== target.hostname;
-      } catch (e) {
-        return true; // Treat invalid URLs as external
-      }
-    };
+  // Utility to detect external links
+  const isExternal = (url) => {
+    try {
+      const base = new URL(Cypress.config().baseUrl);
+      const target = new URL(url, base);
+      return base.hostname !== target.hostname;
+    } catch (e) {
+      return true;
+    }
+  };
 
-    this.getAnchorLinks()
-      .each(($el) => {
-        cy.wait(2000);
-        const href = $el.attr("href");
+  this.getAnchorLinks().then(($links) => {
+    const links = Cypress.$.makeArray($links); // Convert to array for sequential processing
 
-        // Skip empty, mailto, tel, and fragment links
-        if (
-          !href ||
-          href.startsWith("mailto:") ||
-          href.startsWith("tel:") ||
-          href.startsWith("#")
-        ) {
-          cy.log(`🔕 Skipping non-testable link: ${href}`);
-          return;
-        }
-
-        // Handle relative and absolute URLs
-        const fullUrl = href.startsWith("http")
-          ? href
-          : `${Cypress.config().baseUrl}${href}`;
-
-        // Skip external links
-        if (isExternal(fullUrl)) {
-          cy.log(`🌐 Skipping external link: ${fullUrl}`);
-          return;
-        }
-
-        // Make request to internal link
-        cy.requestWithAuth(fullUrl, { failOnStatusCode: false })
-          .wait(2000)
-          .then((response) => {
-            if (![200, 301, 302].includes(response.status)) {
-              failedUrls.push({ link: fullUrl, status: response.status });
-            }
-          });
-      })
-      .then(() => {
+    const processLink = (index) => {
+      if (index >= links.length) {
         if (failedUrls.length > 0) {
           const error = new Error(
             `❌ Failed URLs:\n${failedUrls
@@ -250,8 +282,53 @@ class HomePage {
         } else {
           cy.log("✅ All internal links returned valid status codes.");
         }
+        return;
+      }
+
+      const $el = links[index];
+      const href = $el.getAttribute("href");
+
+      if (
+        !href ||
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:") ||
+        href.startsWith("#")
+      ) {
+        cy.log(`🔕 Skipping non-testable link: ${href}`);
+        return processLink(index + 1);
+      }
+
+      const fullUrl = href.startsWith("http")
+        ? href
+        : `${Cypress.config().baseUrl}${href}`;
+
+      if (isExternal(fullUrl)) {
+        cy.log(`🌐 Skipping external link: ${fullUrl}`);
+        return processLink(index + 1);
+      }
+
+      // Use cy.wrap to keep Cypress chain
+      cy.wrap(null).then(() => {
+        return cy
+          .requestWithAuth(fullUrl, { failOnStatusCode: false })
+          .then((response) => {
+            if (![200, 301, 302].includes(response.status)) {
+              failedUrls.push({ link: fullUrl, status: response.status });
+            }
+          })
+          .then(() => {
+            cy.wait(1000); // delay between requests
+          })
+          .then(() => {
+            processLink(index + 1);
+          });
       });
-  }
+    };
+
+    processLink(0);
+  });
+}
+
 
   verifyHeroSectionCarousel() {
     // Visit home page
