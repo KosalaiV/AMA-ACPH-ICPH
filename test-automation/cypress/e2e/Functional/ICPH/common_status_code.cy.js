@@ -49,6 +49,7 @@ describe("All Page - Anchor Tag Response Validation", () => {
     it(`Should verify all anchor tags on "${name}" 
       page return successful status codes`, () => {
       cy.visitWithAuth(path);
+      cy.wait(2000);
       homePage.validateResponseCodes();
     });
   });
