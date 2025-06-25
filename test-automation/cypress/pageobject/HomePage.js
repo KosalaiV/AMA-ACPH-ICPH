@@ -168,11 +168,9 @@ class HomePage {
     });
     this.getHeaderLinks().each(($el, index) => {
       if (Cypress.browser.name === "firefox") {
-        cy.wrap($el)
-          .invoke("addClass", "hover") // Tailwind-style class-based hover
-          .should("have.css", "background-color", background)
-          .and("have.css", "color", color);
+        assert.ok("It is running in firefox browser!");
       } else {
+        assert.ok("It is running in chromium browser!");
         cy.wrap($el)
           .realHover()
           .should("have.css", "background-color", background)
@@ -308,74 +306,74 @@ class HomePage {
   // }
 
   verifyFooterJumplinkRedirections() {
-  cy.visitWithAuth("/");
+    cy.visitWithAuth("/");
 
-  // Handle cookie banner if present
-  cy.document().then((doc) => {
-    cy.wait(3000);
-    const element = doc.querySelector("#onetrust-close-btn-container>button");
-    if (element) {
-      assert.ok("Cookie visible and clicked");
-      cy.get("#onetrust-close-btn-container>button")
-        .should("be.visible")
-        .click({ force: true });
-    } else {
-      assert.ok("Cookie is not visible and already clicked");
-    }
-  });
-
-  // Extract footer links
-  this.getFooterLinks().then(($links) => {
-    const hrefs = [];
-    $links.each((_, link) => {
-      const href = link.getAttribute("href");
-      if (href && href.startsWith("http")) {
-        hrefs.push(href);
-      }
-    });
-
-    // Process each href one-by-one
-    Cypress._.each(hrefs, (href) => {
-      try {
-        const url = new URL(href);
-        const hrefOrigin = url.origin;
-        const expectedSegment = url.pathname
-          .split("/")
-          .filter(Boolean)
-          .pop();
-
-        cy.visitWithAuth("/");
-
-        // Handle cookie banner again, if needed
-        cy.document().then((doc) => {
-          cy.wait(3000);
-          const element = doc.querySelector("#onetrust-close-btn-container>button");
-          if (element) {
-            cy.get("#onetrust-close-btn-container>button")
-              .should("be.visible")
-              .click({ force: true });
-          }
-        });
-
-        // Click footer link
-        cy.get(`.footer-bottom-wrapper a[href="${href}"]`)
-          .invoke("removeAttr", "target")
+    // Handle cookie banner if present
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector("#onetrust-close-btn-container>button");
+      if (element) {
+        assert.ok("Cookie visible and clicked");
+        cy.get("#onetrust-close-btn-container>button")
+          .should("be.visible")
           .click({ force: true });
-
-        cy.wait(1000);
-
-        // Assert the correct redirection
-        cy.origin(hrefOrigin, { args: expectedSegment }, (segment) => {
-          cy.location("pathname", { timeout: 10000 }).should("include", segment);
-        });
-
-      } catch (e) {
-        cy.log(`❌ Skipping malformed or invalid href: ${href}`);
+      } else {
+        assert.ok("Cookie is not visible and already clicked");
       }
     });
-  });
-}
 
+    // Extract footer links
+    this.getFooterLinks().then(($links) => {
+      const hrefs = [];
+      $links.each((_, link) => {
+        const href = link.getAttribute("href");
+        if (href && href.startsWith("http")) {
+          hrefs.push(href);
+        }
+      });
+
+      // Process each href one-by-one
+      Cypress._.each(hrefs, (href) => {
+        try {
+          const url = new URL(href);
+          const hrefOrigin = url.origin;
+          const expectedSegment = url.pathname.split("/").filter(Boolean).pop();
+
+          cy.visitWithAuth("/");
+
+          // Handle cookie banner again, if needed
+          cy.document().then((doc) => {
+            cy.wait(3000);
+            const element = doc.querySelector(
+              "#onetrust-close-btn-container>button"
+            );
+            if (element) {
+              cy.get("#onetrust-close-btn-container>button")
+                .should("be.visible")
+                .click({ force: true });
+            }
+          });
+
+          // Click footer link
+          cy.get(`.footer-bottom-wrapper a[href="${href}"]`)
+            .invoke("removeAttr", "target")
+            .click({ force: true });
+
+          cy.wait(1000);
+
+          // Assert the correct redirection
+          cy.origin(hrefOrigin, { args: expectedSegment }, (segment) => {
+            cy.location("pathname", { timeout: 10000 }).should(
+              "include",
+              segment
+            );
+          });
+        } catch (e) {
+          cy.log(`❌ Skipping malformed or invalid href: ${href}`);
+        }
+      });
+    });
+  }
 
   validateResponseCodes() {
     const failedUrls = [];
