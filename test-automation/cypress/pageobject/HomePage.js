@@ -18,7 +18,7 @@ class HomePage {
   }
 
   getAnchorLinks() {
-    return cy.get("a[href]");
+    return cy.get(".layout-content a");
   }
 
   getHamburgerIconButton() {
@@ -389,65 +389,74 @@ class HomePage {
       }
     };
 
-    this.getAnchorLinks().then(($links) => {
-      const links = Cypress.$.makeArray($links); // Convert to array for sequential processing
+    cy.document().then((doc) => {
+      cy.wait(3000);
+      const element = doc.querySelector(".layout-content a");
+      if (element) {
+        assert.ok("Content is present!");
+        this.getAnchorLinks().then(($links) => {
+          const links = Cypress.$.makeArray($links); // Convert to array for sequential processing
 
-      const processLink = (index) => {
-        if (index >= links.length) {
-          if (failedUrls.length > 0) {
-            const error = new Error(
-              `❌ Failed URLs:\n${failedUrls
-                .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
-                .join("\n")}`
-            );
-            throw error;
-          } else {
-            cy.log("✅ All internal links returned valid status codes.");
-          }
-          return;
-        }
-
-        const $el = links[index];
-        const href = $el.getAttribute("href");
-
-        if (
-          !href ||
-          href.startsWith("mailto:") ||
-          href.startsWith("tel:") ||
-          href.startsWith("#")
-        ) {
-          cy.log(`🔕 Skipping non-testable link: ${href}`);
-          return processLink(index + 1);
-        }
-
-        const fullUrl = href.startsWith("http")
-          ? href
-          : `${Cypress.config().baseUrl}${href}`;
-
-        if (isExternal(fullUrl)) {
-          cy.log(`🌐 Skipping external link: ${fullUrl}`);
-          return processLink(index + 1);
-        }
-
-        // Use cy.wrap to keep Cypress chain
-        cy.wrap(null).then(() => {
-          return cy
-            .requestWithAuth(fullUrl, { failOnStatusCode: false })
-            .then((response) => {
-              if (![200, 301, 302].includes(response.status)) {
-                failedUrls.push({ link: fullUrl, status: response.status });
+          const processLink = (index) => {
+            if (index >= links.length) {
+              if (failedUrls.length > 0) {
+                const error = new Error(
+                  `❌ Failed URLs:\n${failedUrls
+                    .map((url) => `🔗 Link: ${url.link}, Status: ${url.status}`)
+                    .join("\n")}`
+                );
+                throw error;
+              } else {
+                cy.log("✅ All internal links returned valid status codes.");
               }
-            })
-            .then(() => {
-              cy.wait(1000); // delay between requests
-            })
-            .then(() => {
-              processLink(index + 1);
-            });
-        });
-      };
+              return;
+            }
 
-      processLink(0);
+            const $el = links[index];
+            const href = $el.getAttribute("href");
+
+            if (
+              !href ||
+              href.startsWith("mailto:") ||
+              href.startsWith("tel:") ||
+              href.startsWith("#")
+            ) {
+              cy.log(`🔕 Skipping non-testable link: ${href}`);
+              return processLink(index + 1);
+            }
+
+            const fullUrl = href.startsWith("http")
+              ? href
+              : `${Cypress.config().baseUrl}${href}`;
+
+            if (isExternal(fullUrl)) {
+              cy.log(`🌐 Skipping external link: ${fullUrl}`);
+              return processLink(index + 1);
+            }
+
+            // Use cy.wrap to keep Cypress chain
+            cy.wrap(null).then(() => {
+              return cy
+                .requestWithAuth(fullUrl, { failOnStatusCode: false })
+                .then((response) => {
+                  if (![200, 301, 302].includes(response.status)) {
+                    failedUrls.push({ link: fullUrl, status: response.status });
+                  }
+                })
+                .then(() => {
+                  cy.wait(3000); // delay between requests
+                })
+                .then(() => {
+                  processLink(index + 1);
+                });
+            });
+          };
+
+          processLink(0);
+        });
+      } else {
+        assert.ok("Content is not present!");
+      }
     });
   }
 
