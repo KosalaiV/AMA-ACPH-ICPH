@@ -104,6 +104,12 @@ jobs:
             echo "❌ Invalid website selection"
             exit 1
           fi
+      
+      - name: Install dependencies 🧪
+        uses: cypress-io/github-action@v5
+        with:
+          runTests: false
+          working-directory: test-automation
 
       - name: Run Visual Tests with Percy
         env:
