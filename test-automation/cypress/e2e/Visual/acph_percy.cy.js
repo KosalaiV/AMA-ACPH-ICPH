@@ -24,9 +24,23 @@ describe("Visual Testing with Percy", () => {
 
       cy.wait(2000);
 
-      // Click allow button if visible
-      // cy.get(".allowAll").should("be.visible").click({ force: true });
-      cy.wait(1000);
+      // Click close button if cookie is visible
+      cy.document().then((doc) => {
+        cy.wait(3000);
+        const element = doc.querySelector(
+          "#onetrust-close-btn-container>button"
+        );
+        if (element) {
+          assert.ok("Cookie visible and clicked");
+          cy.get("#onetrust-close-btn-container>button")
+            .should("be.visible")
+            .click({ force: true });
+        } else {
+          assert.ok("Cookie is not visible and already clicked");
+        }
+      });
+
+      cy.wait(2000);
 
       // After page load, ensure the custom property has been removed
       cy.window().should("not.have.prop", "beforeReload");
