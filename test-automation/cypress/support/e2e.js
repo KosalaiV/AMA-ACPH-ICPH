@@ -57,7 +57,7 @@ Cypress.on("test:after:run", (test, runnable) => {
 });
 
 beforeEach(() => {
-  cy.clearCookies();
+  cy.resetBrowser();
   cy.clearLocalStorage();
   cy.window().then((win) => win.sessionStorage.clear());
 });

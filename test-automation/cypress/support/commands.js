@@ -45,11 +45,11 @@ Cypress.Commands.add("requestWithAuth", (url) => {
 
   return cy.request(requestOptions);
 });
-// Cypress.Commands.add('resetBrowser', () => {
-//   cy.wrap(
-//     Cypress.automation('remote:debugger:protocol', {
-//       command: 'Network.clearBrowserCache',
-//     })
-//   );
-//   cy.clearCookies();
-// });
+Cypress.Commands.add('resetBrowser', () => {
+  cy.wrap(
+    Cypress.automation('remote:debugger:protocol', {
+      command: 'Network.clearBrowserCache',
+    })
+  );
+  cy.clearCookies();
+});
