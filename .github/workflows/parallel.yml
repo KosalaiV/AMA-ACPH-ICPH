@@ -127,7 +127,7 @@ jobs:
         id: set-command
         run: |
           config_file=$([[ "${{ github.event.inputs.website }}" == "ACPH" ]] && echo "cypress.acph.config.js" || echo "cypress.icph.config.js")
-          echo "command=CYPRESS_NO_COMMAND_LOG=1 npx cypress run --no-runner-ui --env environment=${{ github.event.inputs.env-type }} --browser ${{ github.event.inputs.browser-type }} --config-file $config_file" >> $GITHUB_OUTPUT
+          echo "command=npx cypress run --no-runner-ui --env environment=${{ github.event.inputs.env-type }} --browser ${{ github.event.inputs.browser-type }} --config-file $config_file" >> $GITHUB_OUTPUT
           echo "spec=cypress/e2e/Functional/${{ github.event.inputs.website }}/*.cy.js" >> $GITHUB_OUTPUT
 
   split:
