@@ -56,4 +56,4 @@ jobs:
     secrets:
       CYPRESS_username: ${{ secrets.CYPRESS_USERNAME }}
       CYPRESS_password: ${{ secrets.CYPRESS_PASSWORD }}
-      PERCY_TOKEN: ${{ github.event.inputs.website == 'ACPH' && secrets.ACPH_PERCY_TOKEN || secrets.ICPH_PERCY_TOKEN }}
+      PERCY_TOKEN: ${{ secrets[github.event.inputs.website == 'ACPH' && 'ACPH_PERCY_TOKEN' || 'ICPH_PERCY_TOKEN'] }}
