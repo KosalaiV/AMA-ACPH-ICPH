@@ -107,7 +107,7 @@ jobs:
     needs: set-params
     uses: ./.github/workflows/reusable.yml
     with:
-      n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 19 }}
+      n: ${{ github.event.inputs['testing-type'] == 'Visual' && 1 || 23 }}
       working-directory: "test-automation"
       marge: true
       command: ${{ needs.set-params.outputs.command }}
