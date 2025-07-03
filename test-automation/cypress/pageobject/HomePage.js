@@ -486,8 +486,6 @@ class HomePage {
         });
     });
 
-    // Click allow button if visible
-    // this.getAllowButton().should("be.visible").click({ force: true });
     cy.wait(1000);
 
     // Ensure the hero section is visible
